@@ -1,16 +1,5 @@
 import ply.lex as lex
 
-#Crear los tokens para la siguiente sintaxis
-
-#SELECT * FROM Tabla
-#select campo1, campo2 from Tabla1 where campo==1
-#SELECT campo1 as cedula from Datos where provincia<>"7"
-#print(consulta)
-#DELETE FROM datos WHERE id>1000
-#print("SELECT * FROM Tabla")
-
-#Diccionario de palabras reservadas
-
 """Contribucion Viviana Velasco"""
 
 reserved = {
@@ -84,7 +73,46 @@ reserved = {
 
 #Sequencia de tokens, puede ser lista o tupla
 tokens = (
-  'PLUS', 'MINUS', 'TIMES', 'DIVIDE'
+  'DATATYPES',
+  'PLUS', 
+  'MINUS', 
+  'TIMES', 
+  'DIVIDE', 
+  'INT', 
+  'FLOAT', 
+  'LPAREN', 
+  'RPAREN', 
+  'ID',
+  'EQUAL', 
+  'EQUALC', 
+  'COMMA', 
+  'DIFFERENT', 
+  'STR', 
+  'GREATER', 
+  'LESS', 
+  'SEMICOLON', 
+  'AND', 
+  'OR', 
+  'NOT', 
+  'LIST', 
+  'MAP', 
+  'INCREMENT', 
+  'DECREMENT',
+  'PLUSEQUAL',
+  'MINUSEQUAL',
+  'MULTIPLUS',
+  'DIVIDEEQUAL',
+  'MOD',
+  'SQUAREBRACKETLEFT',
+  'SQUAREBRACKETRIGHT',
+  'CURLYBRACKETLEFT',
+  'CURLYBRACKETRIGHT',
+  'DOLLAR',
+  'DOT',
+  'QUESTIONMARK',
+  'ARROW',
+  'BOOLEAN',
+  'MAPTYPE'
 ) + tuple(reserved.values())
 
 #Exp Regulares para tokens de símbolos
@@ -92,9 +120,78 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
-"""Contribucion Viviana Velasco"""
+"""Fin de Contribucion Viviana Velasco"""
 
-#Contruir analizador
+# Contribuccion David Terreros
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_FLOAT = r'-?\d*\.\d+'
+t_INT = r'-?\d+'
+t_EQUAL = r'='
+t_EQUALC = r'=='
+t_COMMA = r','
+t_DIFFERENT = r'!='
+t_STR = r'("[^"]*"|\'[^\']*\')'
+t_GREATER = r'>'
+t_LESS = r'<'
+t_SEMICOLON = r';'
+t_AND = r'\&'
+t_OR = r'\|'
+t_NOT = r'\!'
+t_LIST = r'\[\]'
+t_MAP = r'\{\}'
+t_INCREMENT = r'\+\+'
+t_DECREMENT = r'--'
+t_MOD = r'%'
+t_PLUSEQUAL = r'\+='
+t_MINUSEQUAL = r'-='
+t_MULTIPLUS = r'\*='
+t_DIVIDEEQUAL = r'\/='
+t_CURLYBRACKETLEFT = r'\{'
+t_CURLYBRACKETRIGHT = r'\}'
+t_SQUAREBRACKETRIGHT = r'\]'
+t_SQUAREBRACKETLEFT = r'\['
+t_DOLLAR = r'\$'
+t_DOT = r'\.'
+t_QUESTIONMARK = r'\?'
+t_ARROW = r'=>'
+
+def t_newline(t):
+  r'\n+'
+  t.lexer.lineno += len(t.value)
+
+def t_ID(t):
+  r"[a-zA-Z][a-zA-Z0-9_]*"
+  t.type = reserved.get(t.value.lower(), 'ID')
+  return t
+
+def t_MAPTYPE(t):
+   r'<>\{\}'
+   pass
+
+t_ignore = ' \t'
+
+def t_COMMENT_SIMPLE(t):
+    r'\/\/.*'
+    pass
+
+def t_COMMENT_DOUBLE(t):
+    r'\/\*.*\*\/'
+    pass
+
+def t_error(t):
+  print("Componente léxico no reconocido '%s'" % t.value[0])
+  t.lexer.skip(1)
+
+def t_BOOLEAN(t):
+  r"(True|False)"
+  return t
+
+def t_DATATYPES(t):
+  r'int | double | String | float | bool | num | var | dynamic'
+  return t
+
+# FIN de Contribuccion David Terreros.
 lexer = lex.lex()
 
 #Testeando
@@ -113,15 +210,15 @@ data = '''
     nums[i] = 0;
   }
   return nums;
+  // Comentarios
+  /*    OTRO coMENTARIO       */
 }
        '''
 
-#Datos de entrada
 lexer.input(data)
 
-# Tokenizador
 while True:
   tok = lexer.token()
   if not tok:
-    break  #Rompe
+    break 
   print(tok)
