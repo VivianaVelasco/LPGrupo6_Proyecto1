@@ -160,6 +160,10 @@ def t_newline(t):
   r'\n+'
   t.lexer.lineno += len(t.value)
 
+def t_DATATYPES(t):
+  r"int|double|String|float|bool|num|var|dynamic"
+  return t
+
 def t_ID(t):
   r"[a-zA-Z][a-zA-Z0-9_]*"
   t.type = reserved.get(t.value.lower(), 'ID')
@@ -187,10 +191,6 @@ def t_BOOLEAN(t):
   r"(True|False)"
   return t
 
-def t_DATATYPES(t):
-  r'int | double | String | float | bool | num | var | dynamic'
-  return t
-
 # FIN de Contribuccion David Terreros.
 lexer = lex.lex()
 
@@ -198,6 +198,7 @@ lexer = lex.lex()
 data = '''
       List<int> moveZeroes(List<int> nums) {
   int lastNonZeroFoundAt = 0;
+  float pivot_test = 3;
 
   for (int i = 0; i < nums.length; ++i) {
     if (nums[i] != 0) {
