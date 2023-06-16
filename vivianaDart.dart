@@ -1,15 +1,28 @@
-List<int> moveZeroes(List<int> nums) {
-  int lastNonZeroFoundAt = 0;
+/// Approximate definite integral of f in [a, b] interval
+double simpson(double Function(double) f, double a, double b, int n) {
+  if (n <= 0) {
+    throw ArgumentError("n have to be greater than 0");
+  }
 
-  for (int i = 0; i < nums.length; ++i) {
-    if (nums[i] != 0) {
-      nums[lastNonZeroFoundAt] = nums[i];
-      lastNonZeroFoundAt += 1;
+  double step = (b - a) / n;
+  double sum = f(a) + f(b);
+
+  for (int i = 1; i < n; i++) {
+    if (i % 2 == 0) {
+      sum += 2 * f(a + i * step);
+    } else {
+      sum += 4 * f(a + i * step);
     }
   }
 
-  for (int i = lastNonZeroFoundAt; i < nums.length; ++i) {
-    nums[i] = 0;
-  }
-  return nums;
+  return (step / 3) * sum;
 }
+
+double f(double x) {
+  return x * x + 2 * x + 7;
+}
+
+void main() {
+  print(simpson(f, 0, 10, 10));
+}
+// Algoritmo tomado de: https://github.com/TheAlgorithms/Dart/blob/master/maths/simpson_rule.dart
