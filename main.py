@@ -167,7 +167,7 @@ def t_DATATYPES(t):
   return t
 
 def t_ID(t):
-  r"[a-zA-Z][a-zA-Z0-9_]*"
+  r"[_a-zA-Z][a-zA-Z0-9_]*"
   t.type = reserved.get(t.value.lower(), 'ID')
   return t
 
@@ -198,34 +198,10 @@ lexer = lex.lex()
 
 #Testeando
 data = '''
-/// Approximate definite integral of f in [a, b] interval
-double simpson(double Function(double) f, double a, double b, int n) {
-  if (n <= 0) {
-    throw ArgumentError("n have to be greater than 0");
-  }
-
-  double step = (b - a) / n;
-  double sum = f(a) + f(b);
-
-  for (int i = 1; i < n; i++) {
-    if (i % 2 == 0) {
-      sum += 2 * f(a + i * step);
-    } else {
-      sum += 4 * f(a + i * step);
-    }
-  }
-
-  return (step / 3) * sum;
-}
-
-double f(double x) {
-  return x * x + 2 * x + 7;
-}
-
-void main() {
-  print(simpson(f, 0, 10, 10));
-}
-// Algoritmo tomado de: https://github.com/TheAlgorithms/Dart/blob/master/maths/simpson_rule.dart
+        void main(List<String> args) {
+          int _number = 0;
+          print(_number);
+        }
        '''
 
 lexer.input(data)
