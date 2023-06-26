@@ -17,7 +17,14 @@ def p_parametro(p):
 
 def p_funcion(p):
     'funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT '
+#Sentencia Return y Retornar Values hecho por David Terreros
+def p_sentenciaReturn(p):
+    '''sentenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON'''
 
+
+def p_retornarValues(p):
+    '''retornarValues : values
+    | NULL'''
 
 # If condicion
 def p_operadorcondicion(p):
@@ -40,11 +47,20 @@ def p_sentenciaIfElse(p):
 
 
 def p_set(p):
-    'set : values COMMA set | values '
+    '''set : values COMMA set 
+    | values'''
 
 
 def p_declarset(p):
-    'declarset: SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON | DATATYPES ID EQUAL LESS DATATYPES GREATER CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON | setadd | setclear | setcontains | setAddAll | setlengh | setremove'
+    '''declarset : SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON
+    | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
+    | DATATYPES ID EQUAL LESS DATATYPES GREATER CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
+    | setadd
+    | setclear
+    | setcontains
+    | setAddAll
+    | setlengh
+    | setremove'''
 
 
 def p_setadd(p):
@@ -52,22 +68,50 @@ def p_setadd(p):
 
 
 def p_setclear(p):
-    'setclear : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'
+    '''setclear : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setcontains(p):
-    'setcontains : ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'
+    '''setcontains : ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setAddAll(p):
-    "setAddAll : ID DOT ADDALL LPAREN ID RPAREN SEMICOLON"
+    '''setAddAll : ID DOT ADDALL LPAREN ID RPAREN SEMICOLON'''
 
 def p_setlengh(p):
-    "setlengh : ID DOT LENGTH SEMICOLON"
+    '''setlengh : ID DOT LENGTH SEMICOLON'''
 
 def p_setremove(p):
-    'setremove : ID DOT REMOVE LPAREN values RPAREN SEMICOLON'
+    '''setremove : ID DOT REMOVE LPAREN values RPAREN SEMICOLON'''
 
+#foreach
+def p_foreach(p):
+    '''foreach : ID DOT FOREACH  LPAREN instruccionesMas RPAREN SEMICOLON'''
+
+#List
+
+def p_array(p):
+    '''array :  ID EQUAL  arrayInicio SEMICOLON
+    | ID EQUAL  arrayInicio SEMICOLON
+    | arrayFunc SEMICOLON'''
+
+def p_arrayInicio(p):
+    '''arrayInicio :  SQUAREBRACKETLEFT SQUAREBRACKETRIGHT
+    | SQUAREBRACKETLEFT set SQUAREBRACKETRIGHT
+    | ID DOT subArray'''
+
+def p_arrayFunc(p):
+    '''arrayFunc : ID POINT subArray'''
+
+def p_listBuscar(p):
+    '''listBuscar : ID DOT LENGTH SEMICOLON'''
+
+def p_arrayChanges(p):
+    '''arrayChanges : ID SQUAREBRACKETLEFT value SQUAREBRACKETRIGHT EQUAL value SEMICOLON'''
+
+def p_subArray(p):
+    '''subArray :  SUBLIST LPAREN values RPAREN
+    | subArray POINT subArray'''
 
 # Fin de Contribucion Viviana Velasco
 # Contribuccion de David Terreros => Map, For y Funcion Normal.
@@ -102,13 +146,7 @@ def p_values(p):
     '''
 
 
-def p_setenciaReturn(p):
-    '''setenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON'''
 
-
-def p_retornarValues(p):
-    '''retornarValues : values
-    | NULL'''
 # Map David Terreros
 
 

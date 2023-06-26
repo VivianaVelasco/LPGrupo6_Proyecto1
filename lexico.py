@@ -73,7 +73,9 @@ reserved = {
   'addAll': 'ADDALL',
   'contains': 'CONTAINS',
   'remove': 'REMOVE',
-  'length': 'LENGTH'
+  'length': 'LENGTH',
+  'foreach': 'FOREACH',
+  'sublist' : 'SUBLIST'
 }
 
 #Sequencia de tokens, puede ser lista o tupla
