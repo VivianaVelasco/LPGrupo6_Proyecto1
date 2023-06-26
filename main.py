@@ -17,11 +17,15 @@ data = '''
 
 '''
 
-while True:
+# Correr
+for i, linea in data:
+    sintactico.parse(linea)
+
+# while True:
   # try:
   #   s = input('dart > ')
   # except EOFError:
   #   break
-  if not data: continue
-  result = sintactico.parse(data)
-  if result != None: print(result)
+  # if not data: continue
+  # result = sintactico.parse(data)
+  # if result != None: print(result)
