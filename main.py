@@ -1,33 +1,59 @@
 from lexico import tokens
 import ply.yacc as yacc
 
+
+def p_instruccionesMas(p):
+    '''instruccionesMas : instruccion 
+    | instruccion instruccionesMas
+    '''
+
+
+def p_instruccion(p):
+    '''instruccion : funcion
+    | sentenciaFor
+    | sentenciaIf
+    | asignacionesMas
+    | estructuraMap
+    | array
+    | arrayChanges
+    | declarset
+    | sentenciaIfElse
+    | sentenciaElse
+    | foreach
+    | listBuscar
+    '''
+
 # Inicio Contribucion Viviana Velasco
 # Funcion
 
 
 def p_parametrosF(p):
     '''parametrosF : parametro COMMA parametrosF
-    | parametro'''
+    | parametro
+    '''
 
 
 def p_parametro(p):
-    '''parametro : DATATYPES ID'''
+    'parametro : DATATYPES ID'
 
 
 def p_funcion(p):
-    '''funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
+    '''funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    '''
+
+# Sentencia Return y Retornar Values hecho por David Terreros
 
 
-# If condicion
-def p_operadorcondicion(p):
-    '''operadorcondicion : EQUALC
-    | GREATER
-    | LESS
-    | DIFFERENT
-    | GREATEREQ
-    | LESSEQ'''
+def p_sentenciaReturn(p):
+    'sentenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON'
+
+
+def p_retornarValues(p):
+    '''retornarValues : values
+    | NULL
+    '''
 
 
 def p_sentenciaIf(p):
@@ -36,8 +62,9 @@ def p_sentenciaIf(p):
 
 def p_sentenciaElse(p):
     '''sentenciaElse : ELSE CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | ELSE sentenciaIf p_sentenciaElse 
-    | ELSE sentenciaIf'''
+    | ELSE sentenciaIf sentenciaElse 
+    | ELSE sentenciaIf
+    '''
 
 
 def p_sentenciaIfElse(p):
@@ -54,10 +81,10 @@ def p_set(p):
 
 
 def p_declarset(p):
-    '''declarset : SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON 
+    '''declarset : SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON
     | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
     | DATATYPES ID EQUAL LESS DATATYPES GREATER CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
-    | setadd 
+    | setadd
     | setclear
     | setcontains
     | setAddAll
@@ -67,7 +94,7 @@ def p_declarset(p):
 
 
 def p_setadd(p):
-    'setadd : ID DOT ADD LPAREN values RPAREN SEMICOLON'
+    '''setadd : ID DOT ADD LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setclear(p):
@@ -90,29 +117,56 @@ def p_setremove(p):
     'setremove : ID DOT REMOVE LPAREN values RPAREN SEMICOLON'
 
 
+# foreach
+def p_foreach(p):
+    'foreach : ID DOT FOREACH  LPAREN instruccionesMas RPAREN SEMICOLON'
+
+
+# Array
+def p_array(p):
+    '''array :  ID EQUAL  arrayInicio SEMICOLON
+    | arrayFunc SEMICOLON
+    '''
+
+
+def p_arrayInicio(p):
+    '''arrayInicio :  SQUAREBRACKETLEFT SQUAREBRACKETRIGHT
+    | SQUAREBRACKETLEFT set SQUAREBRACKETRIGHT
+    | ID DOT subArray
+    '''
+
+
+def p_arrayFunc(p):
+    '''arrayFunc : ID DOT subArray'''
+
+
+def p_listBuscar(p):
+    'listBuscar : ID DOT LENGTH SEMICOLON'
+
+
+def p_arrayChanges(p):
+    'arrayChanges : ID SQUAREBRACKETLEFT values SQUAREBRACKETRIGHT EQUAL values SEMICOLON'
+
+
+def p_subArray(p):
+    '''subArray :  SUBLIST LPAREN values RPAREN SEMICOLON
+    | subArray DOT subArray
+    '''
+
 # Fin de Contribucion Viviana Velasco
 # Contribuccion de David Terreros => Map, For y Funcion Normal.
 
 
-def p_instruccionesMas(p):
-    '''instruccionesMas : instruccion 
-    | instruccion instruccionesMas
-    '''
-
-
-def p_instruccion(p):
-    '''instruccion : asignacion
-    | sentenciaFor
-    | condicionif
-    | funcion
-    '''
-
-
 def p_asignacion(p):
-    '''asignacion : DATATYPES ID EQUAL VALUES SEMICOLON
-    | VARTYPE ID EQUAL VALUES SEMICOLON
-    | DATATYPES ID operadoresAsignacion VALUES SEMICOLON
+    '''asignacion : DATATYPES ID EQUAL values SEMICOLON
+    | VARTYPE ID EQUAL values SEMICOLON
+    | DATATYPES ID operadoresAsignacion values SEMICOLON
     '''
+
+
+def p_asignacionesMas(p):
+    '''asignacionesMas : asignacion
+    | asignacion asignacionesMas'''
 
 
 def p_values(p):
@@ -123,40 +177,37 @@ def p_values(p):
     '''
 
 
-def p_setenciaReturn(p):
-    'setenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON'
-
-
-def p_retornarValues(p):
-    '''retornarValues : values
-    | NULL'''
 # Map David Terreros
-
-
 def p_estructuraMap(p):
-    '''estructuraMap : MAP ID EQUAL CURLYBRACKETLEFT p_itemsMaps CURLYBRACKETRIGHT SEMICOLON 
-    | MAP LESS DATATYPES COMMA DATATYPES GREATER ID EQUAL CURLYBRACKETLEFT p_itemsMaps CURLYBRACKETRIGHT SEMICOLON 
-    | VARTPE ID EQUAL CURLYBRACKETLEFT p_itemsMaps CURLYBRACKETRIGHT SEMICOLON 
-    | VARTPE ID EQUAL NEW MAP LPAREN RPAREN SEMICOLON
-    | VARTPE ID EQUAL NEW MAP LESS DATATYPES COMMA DATATYPES GREATER LPAREN RPAREN SEMICOLON'''
+    '''estructuraMap : MAP ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
+    | MAP LESS DATATYPES COMMA DATATYPES GREATER ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
+    | VARTYPE ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
+    | VARTYPE ID EQUAL NEW MAP LPAREN RPAREN SEMICOLON
+    | VARTYPE ID EQUAL NEW MAP LESS DATATYPES COMMA DATATYPES GREATER LPAREN RPAREN SEMICOLON
+    | metodoMapClear
+    | metodoMapRemoveKey
+    | metodoMapAddAll
+    | metodoMapAdd
+    '''
 
 
 def p_itemsMaps(p):
     '''itemsMaps : values COLON values
-    | values COLON values COMMA itemsMaps'''
+    | values COLON values COMMA itemsMaps
+    '''
 
 
 # Estructura de Control David Terreros
-
-
 def p_sentenciaFor(p):
-    'sentenciaFor : FOR LPAREN asignacion SEMICOLON p_comparacion SEMICOLON operadoresArimeticoId RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'
+    '''sentenciaFor : FOR LPAREN asignacion SEMICOLON comparacion SEMICOLON operadoresArimeticoId RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
 
 
 def p_comparacion(p):
     '''comparacion : ID comparador values 
     | ID comparador ID 
-    | BOOLEAN'''
+    | BOOLEAN
+    | ID operadoresLogicos ID
+    '''
 
 
 def p_comparador(p):
@@ -165,13 +216,15 @@ def p_comparador(p):
     | GREATEREQ
     | LESSEQ
     | EQUALC
-    | DIFFERENT'''
+    | DIFFERENT
+    '''
 
 
 def p_operadoresLogicos(p):
     '''operadoresLogicos : AND
     | OR
-    | NOT'''
+    | NOT
+    '''
 
 
 def p_operadoresArimeticoId(p):
@@ -180,14 +233,16 @@ def p_operadoresArimeticoId(p):
     | ID PLUSEQUAL values
     | ID MINUSEQUAL values
     | ID MULTIPLUS values
-    | ID DIVIDEEQUAL values'''
+    | ID DIVIDEEQUAL values
+    '''
 
 
 def p_operadoresAsignacion(p):
     '''operadoresAsignacion : PLUSEQUAL 
     | MINUSEQUAL
     | MULTIPLUS
-    | DIVIDEEQUAL'''
+    | DIVIDEEQUAL
+    '''
 
 
 # INICIO Funciones David Terreros
@@ -196,11 +251,11 @@ def p_metodoMapClear(p):
 
 
 def p_metodoMapRemoveKey(p):
-    'metodoMapClear : ID DOT CLEAR LPAREN VALUES RPAREN SEMICOLON'
+    'metodoMapRemoveKey : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'
 
 
 def p_metodoMapAddAll(p):
-    'metodoMapClear : ID DOT CLEAR LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'''
+    'metodoMapAddAll : ID DOT CLEAR LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'
 
 
 def p_metodoMapAdd(p):

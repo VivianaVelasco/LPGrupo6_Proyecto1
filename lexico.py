@@ -3,128 +3,132 @@ import ply.lex as lex
 """Contribucion Viviana Velasco"""
 
 reserved = {
-  'abstract': 'ABSTRACT',
-  'else': 'ELSE',
-  'import': 'IMPORT',
-  'show': 'SHOW',
-  'as': 'AS',
-  'enum': 'ENUM',
-  'in': 'IN',
-  'static': 'STATIC',
-  'assert': 'ASSERT',
-  'export': 'EXPORT',
-  'interface': 'INTERFACE',
-  'super': 'SUPER',
-  'async': 'ASYNC',
-  'extends': 'EXTENDS',
-  'is': 'IS',
-  'switch': 'SWITCH',
-  'await': 'AWAIT',
-  'extension': 'EXTENSION',
-  'late': 'LATE',
-  'sync': 'SYNC',
-  'base': 'BASE',
-  'external': 'EXTERNAL',
-  'library': 'LIBRARY',
-  'this': 'THIS',
-  'break': 'BREAK',
-  'factory': 'FACTORY',
-  'mixin': 'MIXIN',
-  'throw': 'THROW',
-  'case': 'CASE',
-  'false': 'FALSE',
-  'new': 'NEW',
-  'true': 'TRUE',
-  'catch': 'CATCH',
-  'final': 'FINAL',
-  'null': 'NULL',
-  'try': 'TRY',
-  'class': 'CLASS',
-  'on': 'ON',
-  'typedef': 'TYPEDEF',
-  'const': 'CONST',
-  'finally': 'FINALLY',
-  'operator': 'OPERATOR',
-  'var': 'VAR',
-  'continue': 'CONTINUE',
-  'for': 'FOR',
-  'part': 'PART',
-  'void': 'VOID',
-  'covariant': 'COVARIANT',
-  'Function': 'FUNCTION',
-  'required': 'REQUIRED',
-  'when': 'WHEN',
-  'default': 'DEFAULT',
-  'get': 'GET',
-  'rethrow': 'RETHROW',
-  'while': 'WHILE',
-  'deferred': 'DEFERRED',
-  'hide': 'HIDE',
-  'return': 'RETURN',
-  'with': 'WITH',
-  'do': 'DO',
-  'if': 'IF',
-  'sealed': 'SEALED',
-  'yield': 'YIELD',
-  'dynamic': 'DYNAMIC',
-  'implements': 'IMPLEMENTS',
-  'set': 'SET',
-  'clear': 'CLEAR',
-  'addAll': 'ADDALL',
-  'contains': 'CONTAINS',
-  'remove': 'REMOVE',
-  'length': 'LENGTH'
+    'abstract': 'ABSTRACT',
+    'else': 'ELSE',
+    'import': 'IMPORT',
+    'show': 'SHOW',
+    'as': 'AS',
+    'enum': 'ENUM',
+    'in': 'IN',
+    'static': 'STATIC',
+    'assert': 'ASSERT',
+    'export': 'EXPORT',
+    'interface': 'INTERFACE',
+    'super': 'SUPER',
+    'async': 'ASYNC',
+    'extends': 'EXTENDS',
+    'is': 'IS',
+    'switch': 'SWITCH',
+    'await': 'AWAIT',
+    'extension': 'EXTENSION',
+    'late': 'LATE',
+    'sync': 'SYNC',
+    'base': 'BASE',
+    'external': 'EXTERNAL',
+    'library': 'LIBRARY',
+    'this': 'THIS',
+    'break': 'BREAK',
+    'factory': 'FACTORY',
+    'mixin': 'MIXIN',
+    'throw': 'THROW',
+    'case': 'CASE',
+    'false': 'FALSE',
+    'new': 'NEW',
+    'true': 'TRUE',
+    'catch': 'CATCH',
+    'final': 'FINAL',
+    'null': 'NULL',
+    'try': 'TRY',
+    'class': 'CLASS',
+    'on': 'ON',
+    'typedef': 'TYPEDEF',
+    'const': 'CONST',
+    'finally': 'FINALLY',
+    'operator': 'OPERATOR',
+    'var': 'VAR',
+    'continue': 'CONTINUE',
+    'for': 'FOR',
+    'part': 'PART',
+    'void': 'VOID',
+    'covariant': 'COVARIANT',
+    'Function': 'FUNCTION',
+    'required': 'REQUIRED',
+    'when': 'WHEN',
+    'default': 'DEFAULT',
+    'get': 'GET',
+    'rethrow': 'RETHROW',
+    'while': 'WHILE',
+    'deferred': 'DEFERRED',
+    'hide': 'HIDE',
+    'return': 'RETURN',
+    'with': 'WITH',
+    'do': 'DO',
+    'if': 'IF',
+    'sealed': 'SEALED',
+    'yield': 'YIELD',
+    'dynamic': 'DYNAMIC',
+    'implements': 'IMPLEMENTS',
+    'set': 'SET',
+    'clear': 'CLEAR',
+    'addAll': 'ADDALL',
+    'contains': 'CONTAINS',
+    'remove': 'REMOVE',
+    'length': 'LENGTH',
+    'foreach': 'FOREACH',
+    'sublist': 'SUBLIST',
+    'map': 'MAP',
+    'add': 'ADD'
 }
 
-#Sequencia de tokens, puede ser lista o tupla
+# Sequencia de tokens, puede ser lista o tupla
 tokens = (
-  'DATATYPES',
-  'PLUS', 
-  'MINUS', 
-  'TIMES', 
-  'DIVIDE', 
-  'INT', 
-  'FLOAT', 
-  'LPAREN', 
-  'RPAREN', 
-  'ID',
-  'EQUAL', 
-  'EQUALC', 
-  'COMMA', 
-  'DIFFERENT', 
-  'STR', 
-  'GREATER', 
-  'LESS', 
-  'SEMICOLON', 
-  'AND', 
-  'OR', 
-  'NOT', 
-  'LIST', 
-  'MAPEMPTY', 
-  'INCREMENT', 
-  'DECREMENT',
-  'PLUSEQUAL',
-  'MINUSEQUAL',
-  'MULTIPLUS',
-  'DIVIDEEQUAL',
-  'MOD',
-  'SQUAREBRACKETLEFT',
-  'SQUAREBRACKETRIGHT',
-  'CURLYBRACKETLEFT',
-  'CURLYBRACKETRIGHT',
-  'DOLLAR',
-  'DOT',
-  'QUESTIONMARK',
-  'GREATEREQ',
-  'LESSEQ',
-  'BOOLEAN',
-  'MAPTYPE',
-  'UNDERSCORE',
-  'COLON',
-  'VARTPE'
+    'DATATYPES',
+    'PLUS',
+    'MINUS',
+    'TIMES',
+    'DIVIDE',
+    'INT',
+    'FLOAT',
+    'LPAREN',
+    'RPAREN',
+    'ID',
+    'EQUAL',
+    'EQUALC',
+    'COMMA',
+    'DIFFERENT',
+    'STR',
+    'GREATER',
+    'LESS',
+    'SEMICOLON',
+    'AND',
+    'OR',
+    'NOT',
+    'LIST',
+    'MAPEMPTY',
+    'INCREMENT',
+    'DECREMENT',
+    'PLUSEQUAL',
+    'MINUSEQUAL',
+    'MULTIPLUS',
+    'DIVIDEEQUAL',
+    'MOD',
+    'SQUAREBRACKETLEFT',
+    'SQUAREBRACKETRIGHT',
+    'CURLYBRACKETLEFT',
+    'CURLYBRACKETRIGHT',
+    'DOLLAR',
+    'DOT',
+    'QUESTIONMARK',
+    'GREATEREQ',
+    'LESSEQ',
+    'BOOLEAN',
+    'MAPTYPE',
+    'UNDERSCORE',
+    'COLON',
+    'VARTYPE'
 ) + tuple(reserved.values())
 
-#Exp Regulares para tokens de símbolos
+# Exp Regulares para tokens de símbolos
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
@@ -168,48 +172,60 @@ t_GREATEREQ = r'<='
 t_LESSEQ = r'<='
 t_UNDERSCORE = r"_"
 
-def t_VARTPE(t):
-   r'var|final|const'
-   return t
+
+def t_VARTYPE(t):
+    r'var|final|const'
+    return t
+
 
 def t_newline(t):
-  r'\n+'
-  t.lexer.lineno += len(t.value)
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 
 def t_DATATYPES(t):
-  r"int|double|String|float|bool|num|dynamic"
-  return t
+    r"int|double|String|float|bool|num|dynamic"
+    return t
+
 
 def t_ID(t):
-  r"[_?a-zA-Z][a-zA-Z0-9_]*"
-  t.type = reserved.get(t.value.lower(), 'ID')
-  return t
+    r"[_?a-zA-Z][a-zA-Z0-9_]*"
+    t.type = reserved.get(t.value.lower(), 'ID')
+    return t
+
 
 def t_MAPTYPE(t):
-   r'<>\{\}'
-   pass
+    r'<>\{\}'
+    pass
+
 
 t_ignore = ' \t'
+
 
 def t_COMMENT_SIMPLE(t):
     r'\/\/.*'
     pass
 
+
 def t_COMMENT_DOUBLE(t):
     r'\/\*.*\*\/'
     pass
 
+
 def t_contarLineas(t):
-  r"\n+"
-  t.lexer.lineno += len(t.value)
+    r"\n+"
+    t.lexer.lineno += len(t.value)
+
 
 def t_error(t):
-  print("Componente léxico no reconocido '%s'" % t.value[0])
-  t.lexer.skip(1)
+    print("Componente léxico no reconocido '%s'" % t.value[0])
+    t.lexer.skip(1)
+
 
 def t_BOOLEAN(t):
-  r"(true|false)"
-  return t
+    r"(true|false)"
+    return t
+
 
 # FIN de Contribuccion David Terreros.
 lexer = lex.lex()
@@ -222,10 +238,11 @@ data = '''
         }
        '''
 
+
 def consultarToken(data):
     lexer.input(data)
     while True:
         tok = lexer.token()
         if not tok:
-            break 
+            break
         print(tok)
