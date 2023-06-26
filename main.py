@@ -88,7 +88,7 @@ def p_setremove(p):
 def p_foreach(p):
     '''foreach : ID DOT FOREACH  LPAREN instruccionesMas RPAREN SEMICOLON'''
 
-#List
+#Array
 
 def p_array(p):
     '''array :  ID EQUAL  arrayInicio SEMICOLON
