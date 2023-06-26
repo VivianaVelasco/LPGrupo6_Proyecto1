@@ -81,7 +81,9 @@ def p_instruccionesMas(p):
 
 def p_instruccion(p):
     '''instruccion : asignacion
-    |
+    | sentenciaFor
+    | condicionif
+    | funcion
     '''
 
 
@@ -176,7 +178,7 @@ def p_metodoMapRemoveKey(p):
 
 
 def p_metodoMapAddAll(p):
-    '''metodoMapClear : ID DOT CLEAR LPAREN CURLYBRACKETLEFT itemsMaps  CURLYBRACKETRIGHT RPAREN SEMICOLON'''
+    '''metodoMapClear : ID DOT CLEAR LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'''
 
 
 def p_metodoMapAdd(p):
