@@ -10,9 +10,71 @@ def p_condiciones(p):
 
 def p_condicionif(p):
     'condicionif: IF LPAREN condicion RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT'
+# Inicio Contribucion Viviana Velasco
+# Funcion
 
 
+def p_parametrosF(p):
+    'parametrosF : parametro COMA parametrosF | parametro'
+
+
+def p_parametro(p):
+    'parametro : DATATYPES ID '
+
+
+def p_funcion(p):
+    'funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT '
+
+
+# If condicion
+def p_operadorcondicion(p):
+    'operadorcondicion : EQUALC | GREATER | LESS | DIFFERENT | GREATEREQ | LESSEQ '
+
+
+def p_condiciones(p):
+    'condicion : BOOLEAN | ID operadorcondicion ID '
+
+
+def p_sentenciaIf(p):
+    'sentenciaIf : IF LPAREN condicion RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT '
+
+
+def p_sentenciaElse(p):
+    'sentenciaElse : ELSE CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT | ELSE sentenciaIf p_sentenciaElse | ELSE sentenciaIf'
+
+
+def p_sentenciaIfElse(p):
+    'sentenciaIfElse : sentenciaIf | sentenciaIf sentenciaElse'
+
+# Sets
+
+
+def p_set(p):
+    'set : values Coma set | values '
+
+
+def p_declarst(p):
+    'declarset: SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON | DATATYPES ID EQUAL'
+
+
+def p_setadd(p):
+    'setadd : ID DOT ADD LPAREN values RPAREN SEMICOLON'
+
+
+def p_setclear(p):
+    'setclear : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'
+
+
+def p_setcontains(p):
+    'setcontains : ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'
+
+
+def p_setAddAll(p):
+    "setAddAll : ID DOT ADDALL LPAREN id RPAREN SEMICOLON"
+
+# Fin de Contribucion Viviana Velasco
 # Contribuccion de David Terreros => Map, For y Funcion Normal.
+
 
 def p_instruccionesMas(p):
     '''instruccionesMas : instruccion 
@@ -63,9 +125,6 @@ def p_itemsMaps(p):
     '''itemsMaps : values COLON values
     | values COLON values COMMA itemsMaps'''
 
-
-def p_sentenciaIf(p):
-    '''sentenciaIf :'''
 
 # Estructura de Control David Terreros
 

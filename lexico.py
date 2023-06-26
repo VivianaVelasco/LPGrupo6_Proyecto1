@@ -68,9 +68,7 @@ reserved = {
   'yield': 'YIELD',
   'dynamic': 'DYNAMIC',
   'implements': 'IMPLEMENTS',
-  'Set': 'SET',
-  'Map': "MAP",
-  'clear': 'CLEAR'
+  'set': 'SET'
 }
 
 #Sequencia de tokens, puede ser lista o tupla
