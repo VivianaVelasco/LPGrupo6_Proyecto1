@@ -70,7 +70,8 @@ reserved = {
   'implements': 'IMPLEMENTS',
   'set': 'SET',
   'clear': 'CLEAR',
-  'contains': 'CONTAINS'
+  'contains': 'CONTAINS',
+  'addAll': 'ADDALL'
 }
 
 #Sequencia de tokens, puede ser lista o tupla

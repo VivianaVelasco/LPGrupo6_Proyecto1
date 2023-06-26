@@ -37,7 +37,7 @@ def p_set(p):
    'set : values Coma set | values '
 
 def p_declarst(p):
-   'declarset: SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON'
+   'declarset: SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON | DATATYPES ID EQUAL'
 
 def p_setadd(p):
    'setadd : ID DOT ADD LPAREN values RPAREN SEMICOLON'
@@ -48,6 +48,8 @@ def p_setclear(p):
 def p_setcontains(p):
    'setcontains : ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'
 
+def p_setAddAll(p):
+   "setAddAll : ID DOT ADDALL LPAREN id RPAREN SEMICOLON"
 
 #Fin de Contribucion Viviana Velasco
 # Contribuccion de David Terreros => Map, For y Funcion Normal.
