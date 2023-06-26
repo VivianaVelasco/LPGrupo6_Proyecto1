@@ -1,6 +1,14 @@
 from lexico import tokens
 import ply.yacc as yacc
 
+#Inicio Contribucion Viviana Velasco
+def p_condiciones(p):
+    'condicion : BOOLEAN | ID EQUALC ID | ID GREATER ID | ID LESS ID | ID DIFFERENT ID | ID GREATEREQ ID | ID LESSEQ ID'
+
+def p_condicionif(p):
+   'condicionif: IF LPAREN condicion RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT'
+
+
 
 
 def p_error(p):

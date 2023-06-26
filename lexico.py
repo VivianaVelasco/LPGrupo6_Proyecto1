@@ -110,10 +110,12 @@ tokens = (
   'DOLLAR',
   'DOT',
   'QUESTIONMARK',
-  'ARROW',
+  'GREATEREQ',
+  'LESSEQ',
   'BOOLEAN',
   'MAPTYPE',
   'UNDERSCORE'
+
 ) + tuple(reserved.values())
 
 #Exp Regulares para tokens de símbolos
@@ -155,8 +157,10 @@ t_SQUAREBRACKETLEFT = r'\['
 t_DOLLAR = r'\$'
 t_DOT = r'\.'
 t_QUESTIONMARK = r'\?'
-t_ARROW = r'=>'
+t_GREATEREQ = r'=>'
+t_LESSEQ = r'=<'
 t_UNDERSCORE = r"_"
+
 
 def t_newline(t):
   r'\n+'
