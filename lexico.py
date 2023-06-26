@@ -68,7 +68,9 @@ reserved = {
   'yield': 'YIELD',
   'dynamic': 'DYNAMIC',
   'implements': 'IMPLEMENTS',
-  'set': 'SET'
+  'Set': 'SET',
+  'Map': "MAP",
+  'clear': 'CLEAR'
 }
 
 #Sequencia de tokens, puede ser lista o tupla
@@ -95,7 +97,7 @@ tokens = (
   'OR', 
   'NOT', 
   'LIST', 
-  'MAP', 
+  'MAPEMPTY', 
   'INCREMENT', 
   'DECREMENT',
   'PLUSEQUAL',
@@ -114,8 +116,9 @@ tokens = (
   'LESSEQ',
   'BOOLEAN',
   'MAPTYPE',
-  'UNDERSCORE'
-
+  'UNDERSCORE',
+  'COLON',
+  'VARTPE'
 ) + tuple(reserved.values())
 
 #Exp Regulares para tokens de símbolos
@@ -138,11 +141,12 @@ t_STR = r'("[^"]*"|\'[^\']*\')'
 t_GREATER = r'>'
 t_LESS = r'<'
 t_SEMICOLON = r';'
+t_COLON = r':'
 t_AND = r'\&'
 t_OR = r'\|'
 t_NOT = r'\!'
 t_LIST = r'\[\]'
-t_MAP = r'\{\}'
+t_MAPEMPTY = r'\{\}'
 t_INCREMENT = r'\+\+'
 t_DECREMENT = r'--'
 t_MOD = r'%'
@@ -157,17 +161,20 @@ t_SQUAREBRACKETLEFT = r'\['
 t_DOLLAR = r'\$'
 t_DOT = r'\.'
 t_QUESTIONMARK = r'\?'
-t_GREATEREQ = r'=>'
-t_LESSEQ = r'=<'
+t_GREATEREQ = r'<='
+t_LESSEQ = r'<='
 t_UNDERSCORE = r"_"
 
+def t_VARTPE(t):
+   r'var|final|const'
+   return t
 
 def t_newline(t):
   r'\n+'
   t.lexer.lineno += len(t.value)
 
 def t_DATATYPES(t):
-  r"int|double|String|float|bool|num|var|dynamic"
+  r"int|double|String|float|bool|num|dynamic"
   return t
 
 def t_ID(t):
@@ -198,7 +205,7 @@ def t_error(t):
   t.lexer.skip(1)
 
 def t_BOOLEAN(t):
-  r"(True|False)"
+  r"(true|false)"
   return t
 
 # FIN de Contribuccion David Terreros.
