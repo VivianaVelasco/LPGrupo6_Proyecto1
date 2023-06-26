@@ -9,6 +9,37 @@ def p_condicionif(p):
    'condicionif: IF LPAREN condicion RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT'
 
 
+# Contribuccion de David Terreros => Map, For y Funcion Normal.
+
+def p_instruccionesMas(p):
+  '''instruccionesMas : instruccion 
+  | instruccion instruccionesMas
+  '''
+
+def p_instruccion(p):
+  '''instruccion : asignacion
+  |
+  '''
+
+def p_asignacion(p):
+  '''asignacion : DATATYPES ID EQUAL VALUES SEMICOLON
+  '''
+
+def p_values(p):
+  '''values : INT
+  | FLOAT
+  | BOOLEAN
+  | STRING
+  '''
+
+def p_estructuraMap(p):
+   '''estructuraMap : '''
+
+def p_sentenciaIf(p):
+   '''sentenciaIf :'''
+
+def p_funcion(p):
+   '''funcion :'''
 
 
 def p_error(p):
