@@ -76,8 +76,11 @@ reserved = {
     'length': 'LENGTH',
     'foreach': 'FOREACH',
     'sublist': 'SUBLIST',
-    'map': 'MAP',
-    'add': 'ADD'
+    'Map': 'MAP',
+    'add': 'ADD',
+    'List': 'LIST',
+    'filled': 'FILLED',
+    'print': 'PRINT'
 }
 
 # Sequencia de tokens, puede ser lista o tupla
@@ -103,7 +106,7 @@ tokens = (
     'AND',
     'OR',
     'NOT',
-    'LIST',
+    'LISTEMPTY',
     'MAPEMPTY',
     'INCREMENT',
     'DECREMENT',
@@ -152,7 +155,7 @@ t_COLON = r':'
 t_AND = r'\&'
 t_OR = r'\|'
 t_NOT = r'\!'
-t_LIST = r'\[\]'
+t_LISTEMPTY = r'\[\]'
 t_MAPEMPTY = r'\{\}'
 t_INCREMENT = r'\+\+'
 t_DECREMENT = r'--'
@@ -189,7 +192,7 @@ def t_DATATYPES(t):
 
 
 def t_ID(t):
-    r"[_?a-zA-Z][a-zA-Z0-9_]*"
+    r'([a-zA-Z][a-zA-Z0-9_]*)|([$_][a-zA-Z0-9_]+)'
     t.type = reserved.get(t.value.lower(), 'ID')
     return t
 

@@ -21,6 +21,11 @@ def p_instruccion(p):
     | sentenciaElse
     | foreach
     | listBuscar
+    | importsDart
+    | listMethods
+    | sentenciaWhile
+    | palabraBreak
+    | funcionPrint
     '''
 
 # Inicio Contribucion Viviana Velasco
@@ -119,21 +124,28 @@ def p_setremove(p):
 
 # foreach
 def p_foreach(p):
-    'foreach : ID DOT FOREACH  LPAREN instruccionesMas RPAREN SEMICOLON'
+    'foreach : ID DOT FOREACH LPAREN instruccionesMas RPAREN SEMICOLON'
 
 
 # Array
 def p_array(p):
-    '''array :  ID EQUAL  arrayInicio SEMICOLON
+    '''array : ID EQUAL arrayInicio SEMICOLON
     | arrayFunc SEMICOLON
+    | DATATYPES ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
+    | LIST ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     '''
 
 
 def p_arrayInicio(p):
-    '''arrayInicio :  SQUAREBRACKETLEFT SQUAREBRACKETRIGHT
+    '''arrayInicio : SQUAREBRACKETLEFT SQUAREBRACKETRIGHT
     | SQUAREBRACKETLEFT set SQUAREBRACKETRIGHT
     | ID DOT subArray
     '''
+
+
+def p_arrayValues(p):
+    '''arrayValues : values
+    | values COMMA arrayValues'''
 
 
 def p_arrayFunc(p):
@@ -202,11 +214,29 @@ def p_sentenciaFor(p):
     '''sentenciaFor : FOR LPAREN asignacion SEMICOLON comparacion SEMICOLON operadoresArimeticoId RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
 
 
+def p_sentenciaWhile(p):
+    '''sentenciaWhile : WHILE LPAREN comparacion RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
+
+
+def p_funcionPrint(p):
+    '''funcionPrint : PRINT LPAREN printValues RPAREN SEMICOLON'''
+
+
+def p_printValues(p):
+    '''printValues : ID
+    | values'''
+
+
+def p_palabraBreak(p):
+    '''palabraBreak : BREAK SEMICOLON'''
+
+
 def p_comparacion(p):
     '''comparacion : ID comparador values 
     | ID comparador ID 
     | BOOLEAN
     | ID operadoresLogicos ID
+    | BOOLEAN operadoresLogicos ID
     '''
 
 
@@ -263,6 +293,10 @@ def p_metodoMapAdd(p):
 # FIN Funciones David Terreros
 
 
+def p_importsDart(p):
+    'importsDart : IMPORT STR SEMICOLON'
+
+
 def p_error(p):
     if p:
         print("Error de sintaxis en token", p.type)
@@ -270,107 +304,37 @@ def p_error(p):
         print("Syntax error at EOF")
 
 
+def p_listMethods(p):
+    '''listMethods : metodoListFilled'''
+
+
+def p_metodoListFilled(p):
+    '''metodoListFilled : LIST DOT FILLED LPAREN arrayValues RPAREN SEMICOLON'''
+
+
 # Testear Codigo
 data = '''
-import 'dart:math';
-
-const int RUN = 32;
-void insertionSort(List list, int left, int right) {
-  for (int i = left + 1; i <= right; i++) {
-    int temp = list[i];
-    int j = i - 1;
-    while (j >= left && list[j] > temp) {
-      list[j + 1] = list[j];
-      j--;
-    }
-    list[j + 1] = temp;
-  }
-}
-
-void merge(List list, int left, int middle, int right) {
-  int length1 = middle - left + 1, length2 = right - middle;
-  List leftList = List.filled(length1, null),
-      rightList = new List.filled(length2, null);
-
-  for (int i = 0; i < length1; i++) {
-    leftList[i] = list[left + i];
-  }
-
-  for (int i = 0; i < length2; i++) {
-    rightList[i] = list[middle + 1 + i];
-  }
-
-  int i = 0, j = 0, k = 0;
-  while (i < length1 && j < length2) {
-    if (leftList[i] <= rightList[j]) {
-      list[k] = leftList[i];
-      i++;
-    } else {
-      list[k] = rightList[j];
-      j++;
-    }
-    k++;
-  }
-
-  while (i < length1) {
-    list[k] = leftList[i];
-    i++;
-    k++;
-  }
-
-  while (j < length2) {
-    list[k] = rightList[j];
-    k++;
-    j++;
-  }
-}
-
-void timSort(List list, int n) {
-  for (int i = 0; i < n; i += RUN) {
-    insertionSort(list, i, min((i + 31), n - 1));
-  }
-
-  for (int size = RUN; size < n; size = 2 * size) {
-    for (int left = 0; left < n; left += 2 * size) {
-      int middle = left + size - 1;
-      int right = min((left + 2 * size - 1), (n - 1));
-      merge(list, left, middle, right);
-    }
-  }
-}
-
 void main() {
-  //Test 1
-  List arr = [12, 213, 45, 9, 107];
-  timSort(arr, arr.length);
-  print(arr);
-
-  //Test 2
-  List arr2 = [];
-  timSort(arr2, arr2.length);
-  print(arr2);
-
-  //Test 3
-  List arr3 = [];
-  timSort(arr3, arr3.length);
-  print(arr3);
+    List myArr = [1,2,3,4,5,6];
+    print(myArr);
+    myArr.clear();
 }
 '''
 
-# Correr
-# for i, linea in data:
-#     sintactico.parse(linea)
 
 # Build the parser
 sintactico = yacc.yacc()
 
-while True:
-    try:
-        s = input('dart > ')
-    except EOFError:
-        break
-    if not data:
-        continue
-    result = sintactico.parse(data)
-    if result != None:
-        print(result)
+# Correr
+sintactico.parse(data)    
+
+# while True:
+#     try:
+#         s = input('dart > ')
+#     except EOFError:
+#         break
+#     if not data:
+#         continue
+#     result = sintactico.parse(data)
+#     if result != None:
+#         print(result)
