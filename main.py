@@ -35,6 +35,7 @@ def p_funcion(p):
     | DATATYPES FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
     | VOID FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
     | VOID FUNCNAME LPAREN RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
+    | VOID FUNCNAME LPAREN RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT
     '''
 
 
@@ -351,7 +352,7 @@ while(cond == true){if (true) {cond = false; contador++;} else{contador--;} brea
 double twoSum(double x, double y){ final suma = x + y; return suma; }
 double twoSum(){ var suma = x + y; return suma; }
 static int twoSum(double x, double y){ var suma = x + y; return suma; }
-void main() {}
+void main() { }
 '''
 
 
