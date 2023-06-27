@@ -11,14 +11,12 @@ def p_instruccionesMas(p):
 def p_instruccion(p):
     '''instruccion : funcion
     | sentenciaFor
-    | sentenciaIf
     | asignacionesMas
     | estructuraMap
     | array
     | arrayChanges
     | declarset
     | sentenciaIfElse
-    | sentenciaElse
     | foreach
     | listBuscar
     | importsDart
@@ -32,23 +30,22 @@ def p_instruccion(p):
 # Funcion
 
 
+def p_funcion(p):
+    '''funcion : STATIC DATATYPES FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | DATATYPES FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | VOID FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
+    | VOID FUNCNAME LPAREN RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
+    '''
+
+
 def p_parametrosF(p):
-    '''parametrosF : parametro COMMA parametrosF
-    | parametro
+    '''parametrosF : parametro
+    | parametro COMMA parametrosF
     '''
 
 
 def p_parametro(p):
     'parametro : DATATYPES ID'
-
-
-def p_funcion(p):
-    '''funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
-    | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
-    | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
-    '''
-
-# Sentencia Return y Retornar Values hecho por David Terreros
 
 
 def p_sentenciaReturn(p):
@@ -67,8 +64,7 @@ def p_sentenciaIf(p):
 
 def p_sentenciaElse(p):
     '''sentenciaElse : ELSE CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | ELSE sentenciaIf sentenciaElse 
-    | ELSE sentenciaIf
+    | ELSE sentenciaIf sentenciaElse
     '''
 
 
@@ -80,8 +76,8 @@ def p_sentenciaIfElse(p):
 
 # Sets
 def p_set(p):
-    '''set : values COMMA set 
-    | values
+    '''set : values
+    | values COMMA set
     '''
 
 
@@ -96,6 +92,13 @@ def p_declarset(p):
     | setlengh
     | setremove
     '''
+
+
+def p_condicionesPlus(p):
+    '''condicionesPlus : comparacion
+    | comparacion operadoresLogicos condicionesPlus'''
+
+# Metodos de Sets
 
 
 def p_setadd(p):
@@ -153,7 +156,7 @@ def p_arrayFunc(p):
 
 
 def p_listBuscar(p):
-    'listBuscar : ID DOT LENGTH SEMICOLON'
+    'listBuscar : ID DOT WHERE LPAREN instruccionesMas RPAREN SEMICOLON'
 
 
 def p_arrayChanges(p):
@@ -164,15 +167,16 @@ def p_subArray(p):
     '''subArray :  SUBLIST LPAREN values RPAREN SEMICOLON
     | subArray DOT subArray
     '''
-
 # Fin de Contribucion Viviana Velasco
+
+
 # Contribuccion de David Terreros => Map, For y Funcion Normal.
-
-
 def p_asignacion(p):
     '''asignacion : DATATYPES ID EQUAL values SEMICOLON
     | VARTYPE ID EQUAL values SEMICOLON
     | DATATYPES ID operadoresAsignacion values SEMICOLON
+    | ID EQUAL condicionesPlus
+    | ID EQUAL values
     '''
 
 
@@ -232,11 +236,10 @@ def p_palabraBreak(p):
 
 
 def p_comparacion(p):
-    '''comparacion : ID comparador values 
-    | ID comparador ID 
-    | BOOLEAN
+    '''comparacion : ID comparador values
+    | ID comparador ID
     | ID operadoresLogicos ID
-    | BOOLEAN operadoresLogicos ID
+    | BOOLEAN operadoresLogicos BOOLEAN
     '''
 
 
@@ -281,7 +284,7 @@ def p_metodoMapClear(p):
 
 
 def p_metodoMapRemoveKey(p):
-    'metodoMapRemoveKey : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'
+    'metodoMapRemoveKey : ID DOT CLEAR LPAREN arrayValues RPAREN SEMICOLON'
 
 
 def p_metodoMapAddAll(p):
@@ -297,13 +300,6 @@ def p_importsDart(p):
     'importsDart : IMPORT STR SEMICOLON'
 
 
-def p_error(p):
-    if p:
-        print("Error de sintaxis en token", p.type)
-    else:
-        print("Syntax error at EOF")
-
-
 def p_listMethods(p):
     '''listMethods : metodoListFilled'''
 
@@ -312,13 +308,50 @@ def p_metodoListFilled(p):
     '''metodoListFilled : LIST DOT FILLED LPAREN arrayValues RPAREN SEMICOLON'''
 
 
+def p_error(p):
+    if p:
+        print("Error de sintaxis en token", p.type)
+    else:
+        print("Syntax error at EOF")
+
+
 # Testear Codigo
 data = '''
-void main() {
-    List myArr = [1,2,3,4,5,6];
-    print(myArr);
-    myArr.clear();
-}
+int x = 2;
+x++;
+x--;
+String sayHello(String name) { return "${name}"; }
+Set conjunto = new Set();
+Set conjunto2 = new Set.from(conjunto);
+Set conjunto3 = new Set.from([1,2,3]);
+var name = 'Voyager I';
+final year = 1977;
+String palabra = 'BNHA';
+bool res = 4 > 5;
+bool res = 4 >= 5;
+bool res = 4 != 5;
+bool res = 4 < 5;
+bool res = a >= b && 5 == 6 || a <= 3;
+a += 4;
+a -= 4;
+a *= 4;
+a /= 4;
+Map estudiante = {'nombre':'Tom','edad': 23};
+Map <var, int> estudiante = {'nombre':'Tom', 'edad': 23, 'año': 23 };
+var animes = new Map();
+var animes = new Map <var, int >();
+colors.clear();
+lista = [];
+var lista = [];
+lista = [3,-5,7,5,9];
+var lista = ['aaa','eee','iii','ooo','uuu'];
+for(int x = 4; x > 3; x++){for(int y = y; x > 0; x--){x += 2;}}
+int contador = 0;
+while(cond == true){if (true) {cond = false; contador++;} else{contador--;} break;}
+double twoSum(double x, double y){ final suma = x + y; return suma; }
+double twoSum(){ var suma = x + y; return suma; }
+static int twoSum(double x, double y){ var suma = x + y; return suma; }
+void main() {}
 '''
 
 
@@ -326,7 +359,7 @@ void main() {
 sintactico = yacc.yacc()
 
 # Correr
-sintactico.parse(data)    
+sintactico.parse(data)
 
 # while True:
 #     try:

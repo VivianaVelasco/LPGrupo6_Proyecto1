@@ -1,0 +1,34 @@
+int x = 2;
+x++;
+x--;
+String sayHello(String name) { return "${name}"; }
+Set conjunto = new Set();
+Set conjunto2 = new Set.from(conjunto);
+Set conjunto3 = new Set.from([1,2,3]);
+var name = 'Voyager I';
+final year = 1977;
+String palabra = 'BNHA';
+bool res = 4 > 5;
+bool res = 4 >= 5;
+bool res = 4 != 5;
+bool res = 4 < 5;
+bool res = a >= b && 5 == 6 || a <= 3;
+a += 4;
+a -= 4;
+a *= 4;
+a /= 4;
+Map estudiante = {'nombre':'Tom','edad': 23};
+Map <var, int> estudiante = {'nombre':'Tom', 'edad': 23, 'año': 23 };
+var animes = new Map();
+var animes = new Map <var, int >();
+colors.clear();
+lista = [];
+var lista = [];
+lista = [3,-5,7,5,9];
+var lista = ['aaa','eee','iii','ooo','uuu'];
+for(int x = 4; x > 3; x++){for(int y = y; x > 0; x--){x += 2;}}
+int contador = 0;
+while(cond == true){if (true) {cond = false; contador++;} else{contador--;} break;}
+double twoSum(double x, double y){ final suma = x + y; return suma; }
+double twoSum(){ var suma = x + y; return suma; }
+static int twoSum(double x, double y){ var suma = x + y; return suma; }

@@ -80,7 +80,8 @@ reserved = {
     'add': 'ADD',
     'List': 'LIST',
     'filled': 'FILLED',
-    'print': 'PRINT'
+    'print': 'PRINT',
+    'where': 'WHERE'
 }
 
 # Sequencia de tokens, puede ser lista o tupla
@@ -128,7 +129,8 @@ tokens = (
     'MAPTYPE',
     'UNDERSCORE',
     'COLON',
-    'VARTYPE'
+    'VARTYPE',
+    'FUNCNAME'
 ) + tuple(reserved.values())
 
 # Exp Regulares para tokens de símbolos
@@ -174,6 +176,7 @@ t_QUESTIONMARK = r'\?'
 t_GREATEREQ = r'<='
 t_LESSEQ = r'<='
 t_UNDERSCORE = r"_"
+t_FUNCNAME = r"[a-zA-Z][a-zA-Z0-9_]*"
 
 
 def t_VARTYPE(t):
