@@ -85,7 +85,7 @@ def p_set(p):
 def p_declarset(p):
     '''declarset : SET ID EQUAL NEW SET LPAREN RPAREN SEMICOLON
     | SET ID EQUAL CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
-    | DATATYPES ID EQUAL LESS DATATYPES GREATER CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
+    | VARTYPE ID EQUAL LESS DATATYPES GREATER CURLYBRACKETLEFT set CURLYBRACKETRIGHT SEMICOLON
     | setadd
     | setclear
     | setcontains
@@ -165,7 +165,7 @@ def p_arrayChanges(p):
 
 
 def p_subArray(p):
-    '''subArray :  SUBLIST LPAREN values RPAREN SEMICOLON
+    '''subArray : SUBLIST LPAREN values RPAREN SEMICOLON
     | subArray DOT subArray
     '''
 # Fin de Contribucion Viviana Velasco
@@ -176,8 +176,9 @@ def p_asignacion(p):
     '''asignacion : DATATYPES ID EQUAL values SEMICOLON
     | VARTYPE ID EQUAL values SEMICOLON
     | DATATYPES ID operadoresAsignacion values SEMICOLON
-    | ID EQUAL condicionesPlus
-    | ID EQUAL values
+    | ID EQUAL condicionesPlus SEMICOLON
+    | ID EQUAL values SEMICOLON
+    | operadoresArimeticoId
     '''
 
 
@@ -262,12 +263,12 @@ def p_operadoresLogicos(p):
 
 
 def p_operadoresArimeticoId(p):
-    '''operadoresArimeticoId : ID INCREMENT
-    | ID DECREMENT
-    | ID PLUSEQUAL values
-    | ID MINUSEQUAL values
-    | ID MULTIPLUS values
-    | ID DIVIDEEQUAL values
+    '''operadoresArimeticoId : ID INCREMENT SEMICOLON
+    | ID DECREMENT SEMICOLON
+    | ID PLUSEQUAL values SEMICOLON
+    | ID MINUSEQUAL values SEMICOLON
+    | ID MULTIPLUS values SEMICOLON
+    | ID DIVIDEEQUAL values SEMICOLON
     '''
 
 
@@ -317,8 +318,7 @@ def p_error(p):
 
 
 # Testear Codigo
-data = '''
-int x = 2;
+data = '''int x = 2;
 x++;
 x--;
 String sayHello(String name) { return "${name}"; }
@@ -328,17 +328,21 @@ Set conjunto3 = new Set.from([1,2,3]);
 var name = 'Voyager I';
 final year = 1977;
 String palabra = 'BNHA';
-bool res = 4 > 5;
-bool res = 4 >= 5;
-bool res = 4 != 5;
-bool res = 4 < 5;
-bool res = a >= b && 5 == 6 || a <= 3;
+bool res = 4>5;
+bool res = 4>=5;
+bool res = 4!=5;
+bool res = 4<5;
+bool res = a>=b && 5==6 || a<=3;
 a += 4;
 a -= 4;
 a *= 4;
 a /= 4;
 Map estudiante = {'nombre':'Tom','edad': 23};
 Map <var, int> estudiante = {'nombre':'Tom', 'edad': 23, 'año': 23 };
+estudiante.clear('nombre');
+estudiante.addAll({'nombre':'Anthony', 'Nota': 1});
+estudiante["Peso"] = '23.4kg';
+for(int i = 0; i < 3; i++) { print("$i"); }
 var animes = new Map();
 var animes = new Map <var, int >();
 colors.clear();
@@ -351,16 +355,16 @@ int contador = 0;
 while(cond == true){if (true) {cond = false; contador++;} else{contador--;} break;}
 double twoSum(double x, double y){ final suma = x + y; return suma; }
 double twoSum(){ var suma = x + y; return suma; }
-static int twoSum(double x, double y){ var suma = x + y; return suma; }
-void main() { }
-'''
+static int twoSum(double x, double y){ var suma = x + y; return suma; }'''
 
 
 # Build the parser
 sintactico = yacc.yacc()
 
-# Correr
 sintactico.parse(data)
+
+# Correr
+
 
 # while True:
 #     try:

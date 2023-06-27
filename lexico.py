@@ -34,7 +34,6 @@ reserved = {
     'case': 'CASE',
     'false': 'FALSE',
     'new': 'NEW',
-    'true': 'TRUE',
     'catch': 'CATCH',
     'final': 'FINAL',
     'null': 'NULL',
@@ -195,7 +194,7 @@ def t_DATATYPES(t):
 
 
 def t_ID(t):
-    r'([a-zA-Z][a-zA-Z0-9_]*)|([$_][a-zA-Z0-9_]+)'
+    r'[_?a-zA-Z][a-zA-Z0-9_]*'
     t.type = reserved.get(t.value.lower(), 'ID')
     return t
 

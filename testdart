@@ -19,6 +19,10 @@ a *= 4;
 a /= 4;
 Map estudiante = {'nombre':'Tom','edad': 23};
 Map <var, int> estudiante = {'nombre':'Tom', 'edad': 23, 'año': 23 };
+estudiante.clear('nombre');
+estudiante.addAll({'nombre':'Anthony', 'Nota': 1});
+estudiante["Peso"] = '23.4kg';
+for(int i = 0; i < 3; i++) { print("$i"); }
 var animes = new Map();
 var animes = new Map <var, int >();
 colors.clear();
