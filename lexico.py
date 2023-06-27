@@ -3,6 +3,7 @@ import ply.lex as lex
 """Contribucion Viviana Velasco"""
 
 reserved = {
+    'Map': 'MAP',
     'abstract': 'ABSTRACT',
     'else': 'ELSE',
     'import': 'IMPORT',
@@ -75,7 +76,6 @@ reserved = {
     'length': 'LENGTH',
     'foreach': 'FOREACH',
     'sublist': 'SUBLIST',
-    'Map': 'MAP',
     'add': 'ADD',
     'List': 'LIST',
     'filled': 'FILLED',
@@ -129,7 +129,6 @@ tokens = (
     'UNDERSCORE',
     'COLON',
     'VARTYPE',
-    'FUNCNAME'
 ) + tuple(reserved.values())
 
 # Exp Regulares para tokens de símbolos
@@ -175,7 +174,6 @@ t_QUESTIONMARK = r'\?'
 t_GREATEREQ = r'<='
 t_LESSEQ = r'<='
 t_UNDERSCORE = r"_"
-t_FUNCNAME = r"[a-zA-Z][a-zA-Z0-9_]*"
 
 
 def t_VARTYPE(t):
@@ -194,8 +192,8 @@ def t_DATATYPES(t):
 
 
 def t_ID(t):
-    r'[_?a-zA-Z][a-zA-Z0-9_]*'
-    t.type = reserved.get(t.value.lower(), 'ID')
+    r"[_?a-zA-Z][a-zA-Z0-9_]*"
+    t.type = reserved.get(t.value, "ID")
     return t
 
 

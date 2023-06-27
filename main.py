@@ -11,7 +11,7 @@ def p_instruccionesMas(p):
 def p_instruccion(p):
     '''instruccion : funcion
     | sentenciaFor
-    | asignacionesMas
+    | funcionPrint
     | estructuraMap
     | array
     | arrayChanges
@@ -23,7 +23,7 @@ def p_instruccion(p):
     | listMethods
     | sentenciaWhile
     | palabraBreak
-    | funcionPrint
+    | asignacionesMas
     '''
 
 # Inicio Contribucion Viviana Velasco
@@ -31,11 +31,11 @@ def p_instruccion(p):
 
 
 def p_funcion(p):
-    '''funcion : STATIC DATATYPES FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
-    | DATATYPES FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
-    | VOID FUNCNAME LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | VOID FUNCNAME LPAREN RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
-    | VOID FUNCNAME LPAREN RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT
+    '''funcion : STATIC DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | DATATYPES ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas sentenciaReturn CURLYBRACKETRIGHT
+    | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
+    | VOID ID LPAREN RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
+    | VOID ID LPAREN RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT
     '''
 
 
@@ -50,7 +50,8 @@ def p_parametro(p):
 
 
 def p_sentenciaReturn(p):
-    'sentenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON'
+    '''sentenciaReturn : RETURN LPAREN retornarValues RPAREN SEMICOLON
+    | RETURN retornarValues SEMICOLON'''
 
 
 def p_retornarValues(p):
@@ -137,6 +138,7 @@ def p_array(p):
     | arrayFunc SEMICOLON
     | DATATYPES ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     | LIST ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
+    | LIST ID EQUAL LISTEMPTY SEMICOLON
     '''
 
 
@@ -176,6 +178,7 @@ def p_asignacion(p):
     '''asignacion : DATATYPES ID EQUAL values SEMICOLON
     | VARTYPE ID EQUAL values SEMICOLON
     | DATATYPES ID operadoresAsignacion values SEMICOLON
+    | DATATYPES ID EQUAL condicionesPlus SEMICOLON
     | ID EQUAL condicionesPlus SEMICOLON
     | ID EQUAL values SEMICOLON
     | operadoresArimeticoId
@@ -240,6 +243,7 @@ def p_palabraBreak(p):
 def p_comparacion(p):
     '''comparacion : ID comparador values
     | ID comparador ID
+    | values
     | ID operadoresLogicos ID
     | BOOLEAN operadoresLogicos BOOLEAN
     '''
@@ -313,6 +317,13 @@ def p_metodoListFilled(p):
 def p_error(p):
     if p:
         print("Error de sintaxis en token", p.type)
+        # stack_state_str = ' '.join(
+        #     [symbol.type for symbol in sintactico.symstack][1:])
+
+        # print('Syntax error in input! Parser State:{} {} . {}'
+        #       .format(sintactico.state,
+        #               stack_state_str,
+        #               p))
     else:
         print("Syntax error at EOF")
 
@@ -321,41 +332,39 @@ def p_error(p):
 data = '''int x = 2;
 x++;
 x--;
-String sayHello(String name) { return "${name}"; }
+String sayHello(String name){ return "${name}"; }
 Set conjunto = new Set();
-Set conjunto2 = new Set.from(conjunto);
-Set conjunto3 = new Set.from([1,2,3]);
 var name = 'Voyager I';
 final year = 1977;
 String palabra = 'BNHA';
-bool res = 4>5;
-bool res = 4>=5;
-bool res = 4!=5;
-bool res = 4<5;
-bool res = a>=b && 5==6 || a<=3;
+bool res = 4 > 5;
+bool res = 4 >= 5;
+bool res = 4 != 5;
+bool res = 4 < 5;
+bool res = a >= b && 5 == 6 || a <= 3;
 a += 4;
 a -= 4;
 a *= 4;
 a /= 4;
-Map estudiante = {'nombre':'Tom','edad': 23};
-Map <var, int> estudiante = {'nombre':'Tom', 'edad': 23, 'año': 23 };
+final estudiante = {'nombre':'Tom','edad':23};
+Map<string,int> estudiante = {'nombre':'1', 'edad':'23', 'año':'33'};
 estudiante.clear('nombre');
-estudiante.addAll({'nombre':'Anthony', 'Nota': 1});
+estudiante.add({'nombre':'Anthony', 'Nota': 1});
 estudiante["Peso"] = '23.4kg';
-for(int i = 0; i < 3; i++) { print("$i"); }
+for(int i = 0; i < 3; i++){ print("$i"); }
 var animes = new Map();
-var animes = new Map <var, int >();
+var animes = new Map <String,int>();
 colors.clear();
-lista = [];
+final lista = [];
 var lista = [];
 lista = [3,-5,7,5,9];
 var lista = ['aaa','eee','iii','ooo','uuu'];
-for(int x = 4; x > 3; x++){for(int y = y; x > 0; x--){x += 2;}}
+for(int x = 4; x > 3; x++){ for(int y = y; x > 0; x--){x += 2; } }
 int contador = 0;
 while(cond == true){if (true) {cond = false; contador++;} else{contador--;} break;}
-double twoSum(double x, double y){ final suma = x + y; return suma; }
-double twoSum(){ var suma = x + y; return suma; }
-static int twoSum(double x, double y){ var suma = x + y; return suma; }'''
+double twoSum(double x, double y) { final suma = x + y; return suma; }
+double twoSum() { var suma = x + y; return suma; }
+static int twoSum(double x, double y) { var suma = x + y; return suma; }'''
 
 
 # Build the parser
