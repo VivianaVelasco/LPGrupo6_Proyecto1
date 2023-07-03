@@ -9,14 +9,14 @@ from errorHandle import *
 class DartEditorCode(QPlainTextEdit):
 
     class NumberBar(QWidget):
-        def _init_(self, editor):
-            QWidget._init_(self, editor)
+        def __init__(self, editor):
+            QWidget.__init__(self, editor)
 
             self.editor = editor
             self.editor.blockCountChanged.connect(self.updateWidth)
             self.editor.updateRequest.connect(self.updateContents)
             self.font = QFont()
-            self.numberBarColor = QColor("#2F2F36")
+            self.numberBarColor = QColor("#ebebeb")
 
         def paintEvent(self, event):
 
@@ -27,28 +27,20 @@ class DartEditorCode(QPlainTextEdit):
 
             while block.isValid():
                 blockNumber = block.blockNumber()
-                block_top = self.editor.blockBoundingGeometry(
-                    block).translated(self.editor.contentOffset()).top()
-
+                block_top = self.editor.blockBoundingGeometry(block).translated(self.editor.contentOffset()).top()
                 if not block.isVisible() or block_top >= event.rect().bottom():
                     break
-
                 if blockNumber == self.editor.textCursor().blockNumber():
                     self.font.setBold(True)
-                    painter.setPen(QColor("#2F2F36"))
+                    painter.setPen(QColor("#403e3e"))
                 else:
                     self.font.setBold(False)
-                    painter.setPen(QColor("#2F2F36"))
+                    painter.setPen(QColor("#403e3e"))
                 painter.setFont(self.font)
-
-                paint_rect = QRect(0, block_top, self.width(),
-                                   self.editor.fontMetrics().height())
+                paint_rect = QRect(0, int(block_top), self.width(), self.editor.fontMetrics().height())
                 painter.drawText(paint_rect, Qt.AlignRight, str(blockNumber+1))
-
                 block = block.next()
-
             painter.end()
-
             QWidget.paintEvent(self, event)
 
         def getWidth(self):
@@ -74,8 +66,8 @@ class DartEditorCode(QPlainTextEdit):
                 self.font.setStyle(QFont.StyleNormal)
                 self.updateWidth()
 
-    def _init_(self, DISPLAY_LINE_NUMBERS=True, HIGHLIGHT_CURRENT_LINE=True):
-        super(DartEditorCode, self)._init_()
+    def __init__(self, DISPLAY_LINE_NUMBERS=True, HIGHLIGHT_CURRENT_LINE=True):
+        super(DartEditorCode, self).__init__()
 
         self.setFont(QFont("Ubuntu Mono", 11))
         self.setLineWrapMode(QPlainTextEdit.NoWrap)
@@ -114,119 +106,58 @@ class DartEditorCode(QPlainTextEdit):
 
 # Label Code Component
 class CodeLabel(QWidget):
-    def _init_(self):
-        super(CodeLabel, self)._init_()
+    def __init__(self):
+        super(CodeLabel, self).__init__()
         layout = QHBoxLayout()
         label1_txt = QLabel()
         label1_txt.setText("<h4>Write or Paste your copy here: </h4>")
         layout.addWidget(label1_txt)
         self.setLayout(layout)
 
+
 # Print Label Component
 class PrintLabel(QWidget):
 
-    def _init_(self):
-        super(PrintLabel, self)._init_()
+    def __init__(self):
+        super(PrintLabel, self).__init__()
         vb = QVBoxLayout()
         hb_layout = QHBoxLayout()
         label_text = QLabel()
         plain_text = QPlainTextEdit()
 
+
         label_text.setText("Execution <strong> Result Analysis </strong>")
         label_text.setStyleSheet("color: #2D2D2D;")
-        
+       
         plain_text.setReadOnly(True)
         plain_text.setStyleSheet("background-color: #E5E8ED;")
 
+
         hb_layout.addWidget(label_text)
         hb_layout.addStretch(1)
+
 
         vb.addLayout(hb_layout)
         vb.addWidget(plain_text)
         self.setLayout(vb)
 
+# Buttons Component
+class Buttons(QWidget):
 
-    def __init___(self, editor, print_label):
+
+    def __init__(self, editor, print_label):
+        super(Buttons, self).__init__()
         layout = QVBoxLayout()
         button_lexer = QPushButton("Run Lexer")
         button_lexer.setFixedSize(100, 40)
         button_lexer.setCursor(QCursor(Qt.PointingHandCursor))
         button_lexer.clicked.connect(lambda: self.onClickLexer(editor, print_label))
 
+
         button_parser = QPushButton("Run Parser")
         button_parser.setFixedSize(100, 40)
         button_parser.setCursor(QCursor(Qt.PointingHandCursor))
         button_parser.clicked.connect(lambda: self.onClickParser(editor, print_label))
-
-        button_openFile = QPushButton("Open File")
-        button_openFile.setFixedSize(100, 40)
-        button_openFile.setCursor(QCursor(Qt.PointingHandCursor))
-        button_openFile.clicked.connect(lambda: self.openFile(editor))
-
-        layout.addWidget(button_lexer)
-        layout.addWidget(button_parser)
-        layout.addWidget(button_openFile)
-        self.setLayout(layout)
-    
-    def onClickLexer(self, editor, print_label):
-        tp = print_label.plain_text
-        tp.setPlainText("")
-        tp.insertPlainText("Lexical Analysis Output\n")
-        handleError()
-        tokens = runLexerAnalyzer(editor.toPlainText())
-        if handleError.lexer_err:
-            tp.insertPlainText(
-                f"Number of lexer errors: {handleError.lexer_err}\n")
-            tp.insertPlainText(handleError.lexer_err_descript)
-        else:
-            for tok in tokens:
-                tp.insertPlainText("{:4} : {:4}".format(tok.value, tok.type))
-                tp.insertPlainText("\n")
-        tp.insertPlainText("\n")
-        tp.insertPlainText("\n")
-
-    def onClickedParser(self, editor, print_label):
-        tp = print_label.plain_text
-        tp.setPlainText("")
-        tp.insertPlainText("Syntactic Analysis Output\n")
-        handleError()
-        tree = runParserAnalyzer(editor.toPlainText())
-        if handleError.syntax_err:
-            tp.insertPlainText(
-                f"Number of syntax errors: {handleError.syntax_err}\n")
-            tp.insertPlainText(handleError.syntax_err_descript)
-        if handleError.syntax_err:
-            tp.insertPlainText(
-                f"Number of syntax errors: {handleError.syntax_err}\n")
-            tp.insertPlainText(handleError.syntax_err_descript)
-        if not handleError.syntax_err and not handleError.syntax_err:
-            tp.insertPlainText("Build Successfully")
-            tp.insertPlainText("\n")
-
-    def openFile(self, editor):
-        fileSelected = QFileDialog.getOpenFileName()
-        path = fileSelected[0]
-        print(path)
-        with open(path, 'r') as f:
-            editor.setPlainText(f.read())
-
-# Buttons Component
-# Buttons Component
-class Buttons(QWidget):
-
-
-    def __init___(self, editor, print_label):
-        layout = QVBoxLayout()
-        button_lexer = QPushButton("Run Lexer")
-        button_lexer.setFixedSize(100, 40)
-        button_lexer.setCursor(QCursor(Qt.PointingHandCursor))
-        button_lexer.clicked.connect(lambda: self.onClickLexer())
-
-
-        button_parser = QPushButton("Run Parser")
-        button_parser.setFixedSize(100, 40)
-        button_parser.setCursor(QCursor(Qt.PointingHandCursor))
-        button_parser.clicked.connect(lambda: self.onClickParser())
 
 
         button_openFile = QPushButton("Open File")
@@ -322,7 +253,7 @@ class MainApp(QMainWindow):
         printLabel = PrintLabel()
         editor = DartEditorCode(DISPLAY_LINE_NUMBERS=True,
                             HIGHLIGHT_CURRENT_LINE=True)
-        buttons = Buttons(editor, label_exec)
+        buttons = Buttons(editor, printLabel)
 
 
         titulo.setText("Analizador Dart")
@@ -339,7 +270,7 @@ class MainApp(QMainWindow):
         layout_v1.setAlignment(Qt.AlignCenter)
         layout_v2.addWidget(codeLabel)
         layout_v3.addWidget(editor)
-        layout_v3.addWidget(Buttons)
+        layout_v3.addWidget(buttons)
         layout_v4.addWidget(printLabel)
         main_layout = QVBoxLayout()
         main_layout.addLayout(layout_v1)
