@@ -328,14 +328,14 @@ def p_error2(p):
         print("Syntax error at EOF")"""
 
 def p_error(p):
-    if p is not None:
+    if p:
         print(f"Syntax error in line {p.lineno} at {p.value}\n")
-        handleError.syntax_err += 1
-        handleError.syntax_err_message += f"Syntax error in line {p.lineno} at {p.value}.\n More Information: {p.type}\n"
+        handleError.syntax_error += 1
+        handleError.syntax_error_message += f"Syntax error in line {p.lineno} at {p.value}.\n More Information: {p.type}\n"
     else:
         print("Syntax error at EOF\n")
-        handleError.syntax_err += 1
-        handleError.syntax_err_message += f"Syntax error at EOF.\n"
+        handleError.syntax_error += 1
+        handleError.syntax_error_message += f"Syntax error at EOF.\n"
 
 # Testear Codigo
 data = '''int x = 2;

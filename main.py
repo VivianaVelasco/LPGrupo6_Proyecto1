@@ -194,15 +194,11 @@ class Buttons(QWidget):
         tp.insertPlainText("Syntactic Analysis Output\n")
         handleError()
         tree = runParserAnalyzer(editor.toPlainText())
-        if handleError.syntax_err:
+        if handleError.syntax_error:
             tp.insertPlainText(
-                f"Number of syntax errors: {handleError.syntax_err}\n")
-            tp.insertPlainText(handleError.syntax_err_descript)
-        if handleError.syntax_err:
-            tp.insertPlainText(
-                f"Number of syntax errors: {handleError.syntax_err}\n")
-            tp.insertPlainText(handleError.syntax_err_descript)
-        if not handleError.syntax_err and not handleError.syntax_err:
+                f"Number of syntax errors: {handleError.syntax_error}\n")
+            tp.insertPlainText(handleError.syntax_error_message)
+        if not handleError.syntax_error and not handleError.syntax_error_message:
             tp.insertPlainText("Build Successfully")
             tp.insertPlainText("\n")
 
