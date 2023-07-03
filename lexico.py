@@ -1,5 +1,5 @@
 import ply.lex as lex
-
+from errorHandle import *
 """Contribucion Viviana Velasco"""
 
 reserved = {
@@ -221,7 +221,10 @@ def t_contarLineas(t):
 
 
 def t_error(t):
-    print("Componente léxico no reconocido '%s'" % t.value[0])
+    error = f"Unrecognized token {t.value[0]}\n"
+    print(error)
+    handleError.lexer_error += 1
+    handleError.lexer_error_message += error
     t.lexer.skip(1)
 
 

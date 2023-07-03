@@ -69,7 +69,7 @@ class DartEditorCode(QPlainTextEdit):
     def __init__(self, DISPLAY_LINE_NUMBERS=True, HIGHLIGHT_CURRENT_LINE=True):
         super(DartEditorCode, self).__init__()
 
-        self.setFont(QFont("Ubuntu Mono", 11))
+        self.setFont(QFont("Monospace", 11))
         self.setLineWrapMode(QPlainTextEdit.NoWrap)
 
         self.DISPLAY_LINE_NUMBERS = DISPLAY_LINE_NUMBERS
@@ -117,29 +117,28 @@ class CodeLabel(QWidget):
 
 # Print Label Component
 class PrintLabel(QWidget):
+    vb = QVBoxLayout()
+    hb_layout = QHBoxLayout()
+    label_text = None
+    plain_text = None
 
     def __init__(self):
         super(PrintLabel, self).__init__()
-        vb = QVBoxLayout()
-        hb_layout = QHBoxLayout()
-        label_text = QLabel()
-        plain_text = QPlainTextEdit()
+        self.label_text = QLabel()
 
-
-        label_text.setText("Execution <strong> Result Analysis </strong>")
-        label_text.setStyleSheet("color: #2D2D2D;")
+        self.label_text.setText("<strong> Result Analysis </strong>")
+        self.label_text.setStyleSheet("color: #2D2D2D;")
        
-        plain_text.setReadOnly(True)
-        plain_text.setStyleSheet("background-color: #E5E8ED;")
+        self.plain_text = QPlainTextEdit()
+        self.plain_text.setReadOnly(True)
+        self.plain_text.setStyleSheet("background-color: #E5E8ED;")
 
+        self.hb_layout.addWidget(self.label_text)
+        self.hb_layout.addStretch(1)
 
-        hb_layout.addWidget(label_text)
-        hb_layout.addStretch(1)
-
-
-        vb.addLayout(hb_layout)
-        vb.addWidget(plain_text)
-        self.setLayout(vb)
+        self.vb.addLayout(self.hb_layout)
+        self.vb.addWidget(self.plain_text)
+        self.setLayout(self.vb)
 
 # Buttons Component
 class Buttons(QWidget):
@@ -177,10 +176,10 @@ class Buttons(QWidget):
         tp.insertPlainText("Lexical Analysis Output\n")
         handleError()
         tokens = runLexerAnalyzer(editor.toPlainText())
-        if handleError.lexer_err:
+        if handleError.lexer_error:
             tp.insertPlainText(
-                f"Number of lexer errors: {handleError.lexer_err}\n")
-            tp.insertPlainText(handleError.lexer_err_descript)
+                f"Number of lexer errors: {handleError.lexer_error}\n")
+            tp.insertPlainText(handleError.lexer_error_descript)
         else:
             for tok in tokens:
                 tp.insertPlainText("{:4} : {:4}".format(tok.value, tok.type))
@@ -189,7 +188,7 @@ class Buttons(QWidget):
         tp.insertPlainText("\n")
 
 
-    def onClickedParser(self, editor, print_label):
+    def onClickParser(self, editor, print_label):
         tp = print_label.plain_text
         tp.setPlainText("")
         tp.insertPlainText("Syntactic Analysis Output\n")
@@ -256,7 +255,7 @@ class MainApp(QMainWindow):
         buttons = Buttons(editor, printLabel)
 
 
-        titulo.setText("Analizador Dart")
+        titulo.setText("<h1>Dart Analyzer</h1>")
         titulo.setStyleSheet("font-size: 16px; font-weight: bold; text-align: center;")
         # Header
         layout_v1 = QHBoxLayout()
