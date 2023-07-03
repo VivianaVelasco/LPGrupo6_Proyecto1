@@ -1,6 +1,6 @@
-from lexico import tokens
+from lexico import *
 import ply.yacc as yacc
-
+from errorHandle import *
 
 def p_instruccionesMas(p):
     '''instruccionesMas : instruccion 
@@ -313,8 +313,8 @@ def p_listMethods(p):
 def p_metodoListFilled(p):
     '''metodoListFilled : LIST DOT FILLED LPAREN arrayValues RPAREN SEMICOLON'''
 
-
-def p_error(p):
+"""
+def p_error2(p):
     if p:
         print("Error de sintaxis en token", p.type)
         # stack_state_str = ' '.join(
@@ -325,8 +325,17 @@ def p_error(p):
         #               stack_state_str,
         #               p))
     else:
-        print("Syntax error at EOF")
+        print("Syntax error at EOF")"""
 
+def p_error(p):
+    if p is not None:
+        print(f"Syntax error in line {p.lineno} at {p.value}\n")
+        handleError.syntax_err += 1
+        handleError.syntax_err_message += f"Syntax error in line {p.lineno} at {p.value}.\n More Information: {p.type}\n"
+    else:
+        print("Syntax error at EOF\n")
+        handleError.syntax_err += 1
+        handleError.syntax_err_message += f"Syntax error at EOF.\n"
 
 # Testear Codigo
 data = '''int x = 2;
@@ -368,16 +377,15 @@ static int twoSum(double x, double y) { var suma = x + y; return suma; }'''
 
 
 # Build the parser
-sintactico = yacc.yacc()
+# sintactico = yacc.yacc()
 
 # sintactico.parse(data)
 
-
-def analizador_sintactico(data):
-    result = sintactico.parse(data)
-    if result != None:
-        return result
-    return ""
+def runParserAnalyzer(data):
+    runLexerAnalyzer(data)
+    parser = yacc.yacc()
+    result = parser.parse(data)
+    return result
 # Correr
 
 # while True:

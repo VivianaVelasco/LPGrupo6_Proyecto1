@@ -242,10 +242,12 @@ data = '''
        '''
 
 
-def consultarToken(data):
+def runLexerAnalyzer(data):
+    l_token = []
     lexer.input(data)
     while True:
         tok = lexer.token()
         if not tok:
             break
-        print(tok)
+        l_token.append(tok)
+    return l_token
