@@ -334,6 +334,20 @@ def p_operacionesAritmeticas(p):
 
 # Reglas Semanticas
 
+# Viviana Velasco
+def p_error_noOperacionesArit(p):
+    '''error_noOperacionesArit : noOperacionAritmeticaConStrings
+    | noOperacionAritmeticaConStrings error_noOperacionesArit
+    '''
+    handleError.arithmetic_operations_with_strings += 1
+    handleError.arithmetic_operations_with_strings_message += f"A number was expected to perform the operation, please correct the line {p.lineno}.\n"
+
+def p_noOperacionAritmeticaConStrings(p):
+    '''noOperacionAritmeticaConStrings : VARTYPE ID EQUAL STR noOperadorArit INT SEMICOLON
+    | VARTYPE ID EQUAL STR noOperadorArit FLOAT SEMICOLON
+    '''
+# Fin
+
 # David Terreros 
 def p_noOperadorArit(p):
     '''noOperadorArit : PLUS
