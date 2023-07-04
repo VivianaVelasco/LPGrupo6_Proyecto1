@@ -182,6 +182,8 @@ def p_asignacion(p):
     | ID EQUAL condicionesPlus SEMICOLON
     | ID EQUAL values SEMICOLON
     | operadoresArimeticoId
+    | DATATYPES ID EQUAL operacionesAritmeticas SEMICOLON
+    | VARTYPE ID EQUAL STR TIMES INT SEMICOLON
     '''
 
 
@@ -209,6 +211,7 @@ def p_estructuraMap(p):
     | metodoMapRemoveKey
     | metodoMapAddAll
     | metodoMapAdd
+    | MAP id EQUAL MAPEMPTY SEMICOLON
     '''
 
 
@@ -302,16 +305,48 @@ def p_metodoMapAdd(p):
 # FIN Funciones David Terreros
 
 
-def p_importsDart(p):
-    'importsDart : IMPORT STR SEMICOLON'
-
-
 def p_listMethods(p):
     '''listMethods : metodoListFilled'''
 
 
 def p_metodoListFilled(p):
     '''metodoListFilled : LIST DOT FILLED LPAREN arrayValues RPAREN SEMICOLON'''
+
+def p_operadoresAritmeticos(p):
+    '''operadoresAritmeticos : PLUS
+    | MINUS
+    | TIMES
+    | DIVIDE
+    | MOD
+    '''
+def p_operacionAritmetica(p):
+    '''operacionAritmetica : ID operadoresAritmeticos ID
+    | ID operadoresAritmeticos INT
+    | INT operadoresAritmeticos INT
+    | FLOAT operadoresAritmeticos FLOAT
+    | ID operadoresAritmeticos FLOAT
+    '''
+
+def p_operacionesAritmeticas(p):
+    '''operacionesAritmeticas : operacionAritmetica
+    | operacionAritmetica operacionesAritmeticas
+    '''
+
+# Reglas Semanticas
+
+# David Terreros 
+def p_noOperadorArit(p):
+    '''noOperadorArit : PLUS
+    | MINUS
+    | MOD
+    | DIVIDE
+    '''
+
+def p_importsDart(p):
+    '''importsDart : IMPORT STR SEMICOLON
+    | IMPORT STR SEMICOLON AS ID
+    '''
+# Fin David Terreros
 
 """
 def p_error2(p):
@@ -331,7 +366,7 @@ def p_error(p):
     if p:
         print(f"Syntax error in line {p.lineno} at {p.value}\n")
         handleError.syntax_error += 1
-        handleError.syntax_error_message += f"Syntax error in line {p.lineno} at {p.value}.\n More Information: {p.type}\n"
+        handleError.syntax_error_message += f"Syntax error in line {p.lineno} at {p.value}.\nMore Information: {p.type}\n"
     else:
         print("Syntax error at EOF\n")
         handleError.syntax_error += 1
