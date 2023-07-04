@@ -164,10 +164,14 @@ class Buttons(QWidget):
         button_openFile.setCursor(QCursor(Qt.PointingHandCursor))
         button_openFile.clicked.connect(lambda: self.openFile(editor))
 
+        label_options = QLabel()
+        label_options.setText("<strong><u>Options</u></strong>")
 
+        layout.addWidget(label_options)
         layout.addWidget(button_lexer)
         layout.addWidget(button_parser)
         layout.addWidget(button_openFile)
+        
         self.setLayout(layout)
    
     def onClickLexer(self, editor, print_label):
@@ -245,6 +249,18 @@ class MainApp(QMainWindow):
         self.setWindowTitle(self.title)
         codeLabel = CodeLabel()
         titulo = QLabel()
+        label_img = QLabel(self)
+        pixmap_dart = QPixmap("./images/dart_icon.png")
+        label_img.setStyleSheet("""
+        QPixmap {
+            height: 50px;
+            width: 50px;
+        }
+        """)
+        label_img.setPixmap(pixmap_dart.scaled(50, 50, Qt.KeepAspectRatio))
+        label_img.resize(pixmap_dart.width(), pixmap_dart.height())
+        label_img.setAlignment(Qt.AlignHCenter)
+
         printLabel = PrintLabel()
         editor = DartEditorCode(DISPLAY_LINE_NUMBERS=True,
                             HIGHLIGHT_CURRENT_LINE=True)
@@ -261,6 +277,7 @@ class MainApp(QMainWindow):
         layout_v3 = QHBoxLayout()
         #Footer
         layout_v4 = QHBoxLayout()
+        layout_v1.addWidget(label_img)
         layout_v1.addWidget(titulo)
         layout_v1.setAlignment(Qt.AlignCenter)
         layout_v2.addWidget(codeLabel)

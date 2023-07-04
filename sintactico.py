@@ -211,7 +211,7 @@ def p_estructuraMap(p):
     | metodoMapRemoveKey
     | metodoMapAddAll
     | metodoMapAdd
-    | MAP id EQUAL MAPEMPTY SEMICOLON
+    | MAP ID EQUAL MAPEMPTY SEMICOLON
     '''
 
 
@@ -236,7 +236,8 @@ def p_funcionPrint(p):
 
 def p_printValues(p):
     '''printValues : ID
-    | values'''
+    | values
+    '''
 
 
 def p_palabraBreak(p):
@@ -319,6 +320,7 @@ def p_operadoresAritmeticos(p):
     | DIVIDE
     | MOD
     '''
+
 def p_operacionAritmetica(p):
     '''operacionAritmetica : ID operadoresAritmeticos ID
     | ID operadoresAritmeticos INT
@@ -358,7 +360,7 @@ def p_noOperadorArit(p):
 
 def p_importsDart(p):
     '''importsDart : IMPORT STR SEMICOLON
-    | IMPORT STR SEMICOLON AS ID
+    | IMPORT STR AS ID SEMICOLON
     '''
 # Fin David Terreros
 
