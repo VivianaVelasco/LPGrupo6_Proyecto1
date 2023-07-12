@@ -164,6 +164,13 @@ class Buttons(QWidget):
         button_openFile.setCursor(QCursor(Qt.PointingHandCursor))
         button_openFile.clicked.connect(lambda: self.openFile(editor))
 
+        #Modificaciones del Boton clear
+        button_clear = QPushButton("Clear")
+        button_clear.setFixedSize(100, 40)
+        button_clear.setStyleSheet("background-color: #DC3545;")
+        button_clear.setCursor(QCursor(Qt.PointingHandCursor))
+        button_clear.clicked.connect(lambda: self.onClickClear(editor, print_label))
+
         label_options = QLabel()
         label_options.setText("<strong><u>Options</u></strong>")
 
@@ -171,6 +178,7 @@ class Buttons(QWidget):
         layout.addWidget(button_lexer)
         layout.addWidget(button_parser)
         layout.addWidget(button_openFile)
+        layout.addWidget(button_clear)
         
         self.setLayout(layout)
    
@@ -213,6 +221,15 @@ class Buttons(QWidget):
         print(path)
         with open(path, 'r') as f:
             editor.setPlainText(f.read())
+
+    def onClickClear(self, editor, print_label):
+        tp = print_label.plain_text
+        tp.setPlainText("")
+        handleError()
+        editor.setPlainText("")
+
+
+
 
 # Main Component
 class MainApp(QMainWindow):
