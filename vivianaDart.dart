@@ -26,3 +26,34 @@ void main() {
   print(simpson(f, 0, 10, 10));
 }
 // Algoritmo tomado de: https://github.com/TheAlgorithms/Dart/blob/master/maths/simpson_rule.dart
+/*
+void main() {
+  int num1 = 5;
+  int num2 = 8;
+  Set saludo = {'Hola', 'Mundo','Ciao', 'Mondo'};
+  var mascotas = ['perro','gato','conejo','pajaro'];
+  int count = 0;
+  if(num1>num2){
+    count++;
+    saludo.add('Bonjour');
+    if(count>=10){
+      num2 -= 2;
+    }else{
+      num2 += 2;
+    }
+    
+  }else if(num1<num2){
+    num1++;
+    mascotas[1] = 'cat';
+    count += 3;
+  }else{
+    num1--;
+    num2++;
+    count += 4;
+  }
+  print(count);
+  print(mascotas[2]);
+  print(mascotas);
+  
+}
+*/

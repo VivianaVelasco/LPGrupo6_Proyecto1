@@ -46,7 +46,7 @@ def p_parametrosF(p):
 
 
 def p_parametro(p):
-    'parametro : DATATYPES ID'
+    '''parametro : DATATYPES ID'''
 
 
 def p_sentenciaReturn(p):
@@ -61,7 +61,7 @@ def p_retornarValues(p):
 
 
 def p_sentenciaIf(p):
-    'sentenciaIf : IF LPAREN comparacion RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'
+    '''sentenciaIf : IF LPAREN comparacion RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
 
 
 def p_sentenciaElse(p):
@@ -108,28 +108,30 @@ def p_setadd(p):
 
 
 def p_setclear(p):
-    'setclear : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'
+    '''setclear : ID DOT CLEAR LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setcontains(p):
-    'setcontains : ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'
+    '''setcontains : DATATYPES ID EQUAL ID DOT CONTAINS LPAREN values RPAREN SEMICOLON
+    | ID EQUAL ID DOT CONTAINS LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setAddAll(p):
-    'setAddAll : ID DOT ADDALL LPAREN ID RPAREN SEMICOLON'
+    '''setAddAll : ID DOT ADDALL LPAREN ID RPAREN SEMICOLON'''
 
 
 def p_setlengh(p):
-    'setlengh : ID DOT LENGTH SEMICOLON'
+    '''setlengh : DATATYPES ID EQUAL ID DOT LENGTH SEMICOLON
+    | ID EQUAL ID DOT LENGTH SEMICOLON'''
 
 
 def p_setremove(p):
-    'setremove : ID DOT REMOVE LPAREN values RPAREN SEMICOLON'
+    '''setremove : ID DOT REMOVE LPAREN values RPAREN SEMICOLON'''
 
 
 # foreach
 def p_foreach(p):
-    'foreach : ID DOT FOREACH LPAREN instruccionesMas RPAREN SEMICOLON'
+    '''foreach : ID DOT FOREACH LPAREN instruccionesMas RPAREN SEMICOLON'''
 
 
 # Array
@@ -138,7 +140,7 @@ def p_array(p):
     | arrayFunc SEMICOLON
     | DATATYPES ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     | LIST ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
-    | LIST ID EQUAL LISTEMPTY SEMICOLON
+    | LIST LESS DATATYPES GREATER ID EQUAL arrayInicio SEMICOLON
     '''
 
 
