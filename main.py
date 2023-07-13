@@ -201,6 +201,7 @@ class Buttons(QWidget):
                 f"Number of lexer errors: {handleError.lexer_error}\n")
             tp.insertPlainText(handleError.lexer_error_message)
         else:
+            lineaSentence = []
             for tok in tokens:
                 tp.insertPlainText("{:4} : {:4}".format(tok.value, tok.type))
                 tp.insertPlainText("\n")

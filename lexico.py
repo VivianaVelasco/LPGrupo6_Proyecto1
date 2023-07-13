@@ -69,6 +69,7 @@ reserved = {
     'implements': 'IMPLEMENTS',
     'clear': 'CLEAR',
     'addAll': 'ADDALL',
+    'add': 'ADD',
     'contains': 'CONTAINS',
     'remove': 'REMOVE',
     'length': 'LENGTH',
@@ -80,7 +81,8 @@ reserved = {
     'print': 'PRINT',
     'where': 'WHERE',
     'addAll': 'ADDALL',
-    'remove': 'REMOVE'
+    'remove': 'REMOVE',
+    'clearAll': 'CLEARALL'
 }
 
 # Sequencia de tokens, puede ser lista o tupla
@@ -186,7 +188,7 @@ def t_VARTYPE(t):
 
 
 def t_STRUPPER(t):
-    r'("[^"a-z]*"|\'[^\'a-z]*\')'
+    r'("[^"a-z0-9]*"|\'[^\'a-z0-9]*\')'
     return t
 
 

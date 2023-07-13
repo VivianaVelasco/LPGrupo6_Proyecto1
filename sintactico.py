@@ -37,6 +37,8 @@ def p_funcion(p):
     | VOID ID LPAREN parametrosF RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
     | VOID ID LPAREN RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT
     | VOID ID LPAREN RPAREN CURLYBRACKETLEFT CURLYBRACKETRIGHT
+    | DATATYPES ID LPAREN DATATYPES ID RPAREN CURLYBRACKETLEFT RETURN STR SEMICOLON CURLYBRACKETRIGHT
+    | DATATYPES ID LPAREN DATATYPES ID RPAREN CURLYBRACKETLEFT RETURN ID SEMICOLON CURLYBRACKETRIGHT
     '''
 
 
@@ -105,7 +107,7 @@ def p_condicionesPlus(p):
 
 
 def p_setadd(p):
-    '''setadd : ID DOT ADD LPAREN values RPAREN SEMICOLON'''
+    '''setadd : ID DOT ADDALL LPAREN values RPAREN SEMICOLON'''
 
 
 def p_setclear(p):
@@ -142,6 +144,7 @@ def p_array(p):
     | DATATYPES ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     | LIST ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     | LIST LESS DATATYPES GREATER ID EQUAL arrayInicio SEMICOLON
+    | VARTYPE ID EQUAL SQUAREBRACKETLEFT arrayValues SQUAREBRACKETRIGHT SEMICOLON
     '''
 
 
@@ -184,7 +187,7 @@ def p_asignacion(p):
     | DATATYPES ID EQUAL condicionesPlus SEMICOLON
     | ID EQUAL condicionesPlus SEMICOLON
     | ID EQUAL values SEMICOLON
-    | operadoresArimeticoId
+    | operadoresArimeticoId SEMICOLON
     | DATATYPES ID EQUAL operacionesAritmeticas SEMICOLON
     | VARTYPE ID EQUAL STR TIMES INT SEMICOLON
     | VARTYPE ID EQUAL metodosMap SEMICOLON
@@ -228,7 +231,7 @@ def p_itemsMaps(p):
 
 # Estructura de Control David Terreros
 def p_sentenciaFor(p):
-    '''sentenciaFor : FOR LPAREN asignacion SEMICOLON comparacion SEMICOLON operadoresArimeticoId RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
+    '''sentenciaFor : FOR LPAREN asignacion comparacion SEMICOLON operadoresArimeticoId RPAREN CURLYBRACKETLEFT instruccionesMas CURLYBRACKETRIGHT'''
 
 
 def p_sentenciaWhile(p):
@@ -278,12 +281,12 @@ def p_operadoresLogicos(p):
 
 
 def p_operadoresArimeticoId(p):
-    '''operadoresArimeticoId : ID INCREMENT SEMICOLON
-    | ID DECREMENT SEMICOLON
-    | ID PLUSEQUAL values SEMICOLON
-    | ID MINUSEQUAL values SEMICOLON
-    | ID MULTIPLUS values SEMICOLON
-    | ID DIVIDEEQUAL values SEMICOLON
+    '''operadoresArimeticoId : ID INCREMENT
+    | ID DECREMENT
+    | ID PLUSEQUAL values
+    | ID MINUSEQUAL values
+    | ID MULTIPLUS values
+    | ID DIVIDEEQUAL values
     '''
 
 
@@ -302,24 +305,26 @@ def p_metodosMap(p):
     | metodoMapRemoveKey
     | metodoMapAddAll
     | metodoMapAdd
-    | ID DOT LENGTH LPAREN RPAREN SEMICOLON
+    | VARTYPE ID EQUAL ID DOT LENGTH LPAREN RPAREN SEMICOLON
     '''
 
 
 def p_metodoMapClear(p):
-    'metodoMapClear : ID DOT CLEAR LPAREN RPAREN SEMICOLON'
+    '''metodoMapClear : ID DOT CLEARALL LPAREN RPAREN SEMICOLON'''
 
 
 def p_metodoMapRemoveKey(p):
-    'metodoMapRemoveKey : ID DOT REMOVE LPAREN arrayValues RPAREN SEMICOLON'
+    '''metodoMapRemoveKey : ID DOT REMOVE LPAREN arrayValues RPAREN SEMICOLON'''
 
 
 def p_metodoMapAddAll(p):
-    'metodoMapAddAll : ID DOT ADDALL LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'
+    '''metodoMapAddAll : ID DOT ADD LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON
+    | ID DOT ADDALL LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON
+    '''
 
 
 def p_metodoMapAdd(p):
-    'metodoMapAdd : ID SQUAREBRACKETRIGHT values SQUAREBRACKETLEFT EQUAL values SEMICOLON'
+    '''metodoMapAdd : ID SQUAREBRACKETRIGHT values SQUAREBRACKETLEFT EQUAL values SEMICOLON'''
 # FIN Funciones David Terreros
 
 
