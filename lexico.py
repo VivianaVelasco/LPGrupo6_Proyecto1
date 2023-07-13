@@ -3,7 +3,6 @@ from errorHandle import *
 """Contribucion Viviana Velasco"""
 
 reserved = {
-    'Map': 'MAP',
     'abstract': 'ABSTRACT',
     'else': 'ELSE',
     'import': 'IMPORT',
@@ -68,7 +67,6 @@ reserved = {
     'yield': 'YIELD',
     'dynamic': 'DYNAMIC',
     'implements': 'IMPLEMENTS',
-    'set': 'SET',
     'clear': 'CLEAR',
     'addAll': 'ADDALL',
     'contains': 'CONTAINS',
@@ -80,7 +78,9 @@ reserved = {
     'List': 'LIST',
     'filled': 'FILLED',
     'print': 'PRINT',
-    'where': 'WHERE'
+    'where': 'WHERE',
+    'addAll': 'ADDALL',
+    'remove': 'REMOVE'
 }
 
 # Sequencia de tokens, puede ser lista o tupla
@@ -129,6 +129,10 @@ tokens = (
     'UNDERSCORE',
     'COLON',
     'VARTYPE',
+    'STRUPPER',
+    'BADNOTOPERATOR',
+    'MAP',
+    'SET'
 ) + tuple(reserved.values())
 
 # Exp Regulares para tokens de símbolos
@@ -146,7 +150,7 @@ t_INT = r'-?\d+'
 t_EQUAL = r'='
 t_EQUALC = r'=='
 t_COMMA = r','
-t_DIFFERENT = r'!='
+t_DIFFERENT = r'\!\='
 t_STR = r'("[^"]*"|\'[^\']*\')'
 t_GREATER = r'>'
 t_LESS = r'<'
@@ -181,18 +185,37 @@ def t_VARTYPE(t):
     return t
 
 
+def t_STRUPPER(t):
+    r'("[^"a-z]*"|\'[^\'a-z]*\')'
+    return t
+
+
+# def t_STRLOWER(t):
+#     r'("[^"A-Z]*"|\'[^\'A-Z]*\')'
+#     return t
+
+def t_MAP(t):
+    r'Map'
+    return t
+
+
+def t_SET(t):
+    r'Set'
+    return t
+
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
 
 def t_DATATYPES(t):
-    r"int|double|String|float|bool|num|dynamic"
+    r"(int|String|double|float|bool|num|dynamic)"
     return t
 
 
 def t_ID(t):
-    r"[_?a-zA-Z][a-zA-Z0-9_]*"
+    r"[_a-z][a-zA-Z0-9_]*"
     t.type = reserved.get(t.value, "ID")
     return t
 
@@ -200,6 +223,11 @@ def t_ID(t):
 def t_MAPTYPE(t):
     r'<>\{\}'
     pass
+
+
+def t_BADNOTOPERATOR(t):
+    r"~|not"
+    return t
 
 
 t_ignore = ' \t'
@@ -221,7 +249,7 @@ def t_contarLineas(t):
 
 
 def t_error(t):
-    error = f"Unrecognized token {t.value[0]}\n"
+    error = f"Unrecognized token {t.value[0]} {t.lineno}\n"
     print(error)
     handleError.lexer_error += 1
     handleError.lexer_error_message += error
@@ -234,7 +262,7 @@ def t_BOOLEAN(t):
 
 
 # FIN de Contribuccion David Terreros.
-lexer = lex.lex()
+#
 
 # Test
 data = '''
@@ -247,6 +275,8 @@ data = '''
 
 def runLexerAnalyzer(data):
     l_token = []
+    lexer = lex.lex()
+    lexer.lineno = 1
     lexer.input(data)
     while True:
         tok = lexer.token()

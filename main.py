@@ -6,6 +6,8 @@ from sintactico import *
 from errorHandle import *
 
 # Editor Code Component
+
+
 class DartEditorCode(QPlainTextEdit):
 
     class NumberBar(QWidget):
@@ -27,7 +29,8 @@ class DartEditorCode(QPlainTextEdit):
 
             while block.isValid():
                 blockNumber = block.blockNumber()
-                block_top = self.editor.blockBoundingGeometry(block).translated(self.editor.contentOffset()).top()
+                block_top = self.editor.blockBoundingGeometry(
+                    block).translated(self.editor.contentOffset()).top()
                 if not block.isVisible() or block_top >= event.rect().bottom():
                     break
                 if blockNumber == self.editor.textCursor().blockNumber():
@@ -37,7 +40,8 @@ class DartEditorCode(QPlainTextEdit):
                     self.font.setBold(False)
                     painter.setPen(QColor("#403e3e"))
                 painter.setFont(self.font)
-                paint_rect = QRect(0, int(block_top), self.width(), self.editor.fontMetrics().height())
+                paint_rect = QRect(0, int(block_top), self.width(
+                ), self.editor.fontMetrics().height())
                 painter.drawText(paint_rect, Qt.AlignRight, str(blockNumber+1))
                 block = block.next()
             painter.end()
@@ -105,6 +109,8 @@ class DartEditorCode(QPlainTextEdit):
             self.setExtraSelections([hi_selection])
 
 # Label Code Component
+
+
 class CodeLabel(QWidget):
     def __init__(self):
         super(CodeLabel, self).__init__()
@@ -128,7 +134,7 @@ class PrintLabel(QWidget):
 
         self.label_text.setText("<strong> Result Analysis </strong>")
         self.label_text.setStyleSheet("color: #2D2D2D;")
-       
+
         self.plain_text = QPlainTextEdit()
         self.plain_text.setReadOnly(True)
         self.plain_text.setStyleSheet("background-color: #E5E8ED;")
@@ -141,8 +147,9 @@ class PrintLabel(QWidget):
         self.setLayout(self.vb)
 
 # Buttons Component
-class Buttons(QWidget):
 
+
+class Buttons(QWidget):
 
     def __init__(self, editor, print_label):
         super(Buttons, self).__init__()
@@ -150,26 +157,27 @@ class Buttons(QWidget):
         button_lexer = QPushButton("Run Lexer")
         button_lexer.setFixedSize(100, 40)
         button_lexer.setCursor(QCursor(Qt.PointingHandCursor))
-        button_lexer.clicked.connect(lambda: self.onClickLexer(editor, print_label))
-
+        button_lexer.clicked.connect(
+            lambda: self.onClickLexer(editor, print_label))
 
         button_parser = QPushButton("Run Parser")
         button_parser.setFixedSize(100, 40)
         button_parser.setCursor(QCursor(Qt.PointingHandCursor))
-        button_parser.clicked.connect(lambda: self.onClickParser(editor, print_label))
-
+        button_parser.clicked.connect(
+            lambda: self.onClickParser(editor, print_label))
 
         button_openFile = QPushButton("Open File")
         button_openFile.setFixedSize(100, 40)
         button_openFile.setCursor(QCursor(Qt.PointingHandCursor))
         button_openFile.clicked.connect(lambda: self.openFile(editor))
 
-        #Modificaciones del Boton clear
+        # Modificaciones del Boton clear
         button_clear = QPushButton("Clear")
         button_clear.setFixedSize(100, 40)
         button_clear.setStyleSheet("background-color: #DC3545;")
         button_clear.setCursor(QCursor(Qt.PointingHandCursor))
-        button_clear.clicked.connect(lambda: self.onClickClear(editor, print_label))
+        button_clear.clicked.connect(
+            lambda: self.onClickClear(editor, print_label))
 
         label_options = QLabel()
         label_options.setText("<strong><u>Options</u></strong>")
@@ -179,9 +187,9 @@ class Buttons(QWidget):
         layout.addWidget(button_parser)
         layout.addWidget(button_openFile)
         layout.addWidget(button_clear)
-        
+
         self.setLayout(layout)
-   
+
     def onClickLexer(self, editor, print_label):
         tp = print_label.plain_text
         tp.setPlainText("")
@@ -191,14 +199,13 @@ class Buttons(QWidget):
         if handleError.lexer_error:
             tp.insertPlainText(
                 f"Number of lexer errors: {handleError.lexer_error}\n")
-            tp.insertPlainText(handleError.lexer_error_descript)
+            tp.insertPlainText(handleError.lexer_error_message)
         else:
             for tok in tokens:
                 tp.insertPlainText("{:4} : {:4}".format(tok.value, tok.type))
                 tp.insertPlainText("\n")
         tp.insertPlainText("\n")
         tp.insertPlainText("\n")
-
 
     def onClickParser(self, editor, print_label):
         tp = print_label.plain_text
@@ -210,10 +217,27 @@ class Buttons(QWidget):
             tp.insertPlainText(
                 f"Number of syntax errors: {handleError.syntax_error}\n")
             tp.insertPlainText(handleError.syntax_error_message)
+        if handleError.arithmetic_operations_with_strings:
+            tp.insertPlainText(
+                f"Number of syntax errors: {handleError.arithmetic_operations_with_strings}\n")
+            tp.insertPlainText(
+                handleError.arithmetic_operations_with_strings_message)
+        if handleError.upper_case_import:
+            tp.insertPlainText(
+                f"Number of syntax errors: {handleError.upper_case_import}\n")
+            tp.insertPlainText(handleError.upper_case_import_message)
+        if handleError.bad_not_operator:
+            tp.insertPlainText(
+                f"Number of syntax errors: {handleError.bad_not_operator}\n")
+            tp.insertPlainText(handleError.bad_not_operator_message)
+        if handleError.bad_rename_import:
+            tp.insertPlainText(
+                f"Number of syntax errors: {handleError.bad_rename_import}\n")
+            tp.insertPlainText(handleError.bad_rename_import_message)
+
         if not handleError.syntax_error and not handleError.syntax_error_message:
             tp.insertPlainText("Build Successfully")
             tp.insertPlainText("\n")
-
 
     def openFile(self, editor):
         fileSelected = QFileDialog.getOpenFileName()
@@ -227,8 +251,6 @@ class Buttons(QWidget):
         tp.setPlainText("")
         handleError()
         editor.setPlainText("")
-
-
 
 
 # Main Component
@@ -280,19 +302,19 @@ class MainApp(QMainWindow):
 
         printLabel = PrintLabel()
         editor = DartEditorCode(DISPLAY_LINE_NUMBERS=True,
-                            HIGHLIGHT_CURRENT_LINE=True)
+                                HIGHLIGHT_CURRENT_LINE=True)
         buttons = Buttons(editor, printLabel)
 
-
         titulo.setText("<h1>Dart Analyzer</h1>")
-        titulo.setStyleSheet("font-size: 16px; font-weight: bold; text-align: center;")
+        titulo.setStyleSheet(
+            "font-size: 16px; font-weight: bold; text-align: center;")
         # Header
         layout_v1 = QHBoxLayout()
-        #Main
+        # Main
         layout_v2 = QHBoxLayout()
-        #Body
+        # Body
         layout_v3 = QHBoxLayout()
-        #Footer
+        # Footer
         layout_v4 = QHBoxLayout()
         layout_v1.addWidget(label_img)
         layout_v1.addWidget(titulo)
@@ -309,6 +331,7 @@ class MainApp(QMainWindow):
         widget = QWidget(self)
         widget.setLayout(main_layout)
         self.setCentralWidget(widget)
+
 
 if __name__ == "__main__":
     app = QApplication([])

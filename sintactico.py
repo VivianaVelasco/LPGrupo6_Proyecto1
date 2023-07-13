@@ -2,8 +2,9 @@ from lexico import *
 import ply.yacc as yacc
 from errorHandle import *
 
+
 def p_instruccionesMas(p):
-    '''instruccionesMas : instruccion 
+    '''instruccionesMas : instruccion
     | instruccion instruccionesMas
     '''
 
@@ -186,6 +187,11 @@ def p_asignacion(p):
     | operadoresArimeticoId
     | DATATYPES ID EQUAL operacionesAritmeticas SEMICOLON
     | VARTYPE ID EQUAL STR TIMES INT SEMICOLON
+    | VARTYPE ID EQUAL metodosMap SEMICOLON
+    | VARTYPE ID EQUAL NOT ID SEMICOLON
+    | VARTYPE ID EQUAL NOT BOOLEAN SEMICOLON
+    | VARTYPE ID EQUAL LISTEMPTY SEMICOLON
+    | VARTYPE ID EQUAL STRUPPER SEMICOLON
     '''
 
 
@@ -204,15 +210,12 @@ def p_values(p):
 
 # Map David Terreros
 def p_estructuraMap(p):
-    '''estructuraMap : MAP ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
-    | MAP LESS DATATYPES COMMA DATATYPES GREATER ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
-    | VARTYPE ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON 
+    '''estructuraMap : MAP ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON
+    | MAP LESS DATATYPES COMMA DATATYPES GREATER ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON
+    | VARTYPE ID EQUAL CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT SEMICOLON
     | VARTYPE ID EQUAL NEW MAP LPAREN RPAREN SEMICOLON
     | VARTYPE ID EQUAL NEW MAP LESS DATATYPES COMMA DATATYPES GREATER LPAREN RPAREN SEMICOLON
-    | metodoMapClear
-    | metodoMapRemoveKey
-    | metodoMapAddAll
-    | metodoMapAdd
+    | MAP ID EQUAL metodosMap SEMICOLON
     | MAP ID EQUAL MAPEMPTY SEMICOLON
     '''
 
@@ -252,6 +255,8 @@ def p_comparacion(p):
     | values
     | ID operadoresLogicos ID
     | BOOLEAN operadoresLogicos BOOLEAN
+    | NOT ID
+    | NOT BOOLEAN
     '''
 
 
@@ -283,7 +288,7 @@ def p_operadoresArimeticoId(p):
 
 
 def p_operadoresAsignacion(p):
-    '''operadoresAsignacion : PLUSEQUAL 
+    '''operadoresAsignacion : PLUSEQUAL
     | MINUSEQUAL
     | MULTIPLUS
     | DIVIDEEQUAL
@@ -291,16 +296,26 @@ def p_operadoresAsignacion(p):
 
 
 # INICIO Funciones David Terreros
+
+def p_metodosMap(p):
+    '''metodosMap : metodoMapClear
+    | metodoMapRemoveKey
+    | metodoMapAddAll
+    | metodoMapAdd
+    | ID DOT LENGTH LPAREN RPAREN SEMICOLON
+    '''
+
+
 def p_metodoMapClear(p):
     'metodoMapClear : ID DOT CLEAR LPAREN RPAREN SEMICOLON'
 
 
 def p_metodoMapRemoveKey(p):
-    'metodoMapRemoveKey : ID DOT CLEAR LPAREN arrayValues RPAREN SEMICOLON'
+    'metodoMapRemoveKey : ID DOT REMOVE LPAREN arrayValues RPAREN SEMICOLON'
 
 
 def p_metodoMapAddAll(p):
-    'metodoMapAddAll : ID DOT CLEAR LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'
+    'metodoMapAddAll : ID DOT ADDALL LPAREN CURLYBRACKETLEFT itemsMaps CURLYBRACKETRIGHT RPAREN SEMICOLON'
 
 
 def p_metodoMapAdd(p):
@@ -315,6 +330,7 @@ def p_listMethods(p):
 def p_metodoListFilled(p):
     '''metodoListFilled : LIST DOT FILLED LPAREN arrayValues RPAREN SEMICOLON'''
 
+
 def p_operadoresAritmeticos(p):
     '''operadoresAritmeticos : PLUS
     | MINUS
@@ -322,6 +338,7 @@ def p_operadoresAritmeticos(p):
     | DIVIDE
     | MOD
     '''
+
 
 def p_operacionAritmetica(p):
     '''operacionAritmetica : ID operadoresAritmeticos ID
@@ -331,40 +348,12 @@ def p_operacionAritmetica(p):
     | ID operadoresAritmeticos FLOAT
     '''
 
+
 def p_operacionesAritmeticas(p):
     '''operacionesAritmeticas : operacionAritmetica
     | operacionAritmetica operacionesAritmeticas
     '''
 
-# Reglas Semanticas
-
-# Viviana Velasco
-def p_error_noOperacionesArit(p):
-    '''error_noOperacionesArit : noOperacionAritmeticaConStrings
-    | noOperacionAritmeticaConStrings error_noOperacionesArit
-    '''
-    handleError.arithmetic_operations_with_strings += 1
-    handleError.arithmetic_operations_with_strings_message += f"A number was expected to perform the operation, please correct the line {p.lineno}.\n"
-
-def p_noOperacionAritmeticaConStrings(p):
-    '''noOperacionAritmeticaConStrings : VARTYPE ID EQUAL STR noOperadorArit INT SEMICOLON
-    | VARTYPE ID EQUAL STR noOperadorArit FLOAT SEMICOLON
-    '''
-# Fin
-
-# David Terreros 
-def p_noOperadorArit(p):
-    '''noOperadorArit : PLUS
-    | MINUS
-    | MOD
-    | DIVIDE
-    '''
-
-def p_importsDart(p):
-    '''importsDart : IMPORT STR SEMICOLON
-    | IMPORT STR AS ID SEMICOLON
-    '''
-# Fin David Terreros
 
 """
 def p_error2(p):
@@ -380,6 +369,7 @@ def p_error2(p):
     else:
         print("Syntax error at EOF")"""
 
+
 def p_error(p):
     if p:
         print(f"Syntax error in line {p.lineno} at {p.value}\n")
@@ -389,6 +379,71 @@ def p_error(p):
         print("Syntax error at EOF\n")
         handleError.syntax_error += 1
         handleError.syntax_error_message += f"Syntax error at EOF.\n"
+
+
+# Reglas Semanticas
+
+# Viviana Velasco
+
+def p_error_noOperacionesArit(p):
+    '''error_noOperacionesArit : noOperacionAritmeticaConStrings
+    | noOperacionAritmeticaConStrings error_noOperacionesArit
+    '''
+    print("FALL STRINGS OP")
+    handleError.arithmetic_operations_with_strings += 1
+    handleError.arithmetic_operations_with_strings_message += f"A number was expected to perform the operation, please correct the line {p.lineno}.\n"
+
+
+def p_noOperacionAritmeticaConStrings(p):
+    '''noOperacionAritmeticaConStrings : VARTYPE ID EQUAL STR noOperadorArit INT SEMICOLON
+    | VARTYPE ID EQUAL STR noOperadorArit FLOAT SEMICOLON
+    '''
+# Fin
+
+# David Terreros
+
+
+def p_noOperadorArit(p):
+    '''noOperadorArit : PLUS
+    | MINUS
+    | MOD
+    | DIVIDE
+    '''
+
+
+def p_importsDart(p):
+    '''importsDart : IMPORT STR SEMICOLON
+    | IMPORT STR AS ID SEMICOLON
+    '''
+# Fin David Terreros
+
+
+def p_error_badImportDart(p):
+    '''error_badImportDart : IMPORT STRUPPER AS ID SEMICOLON
+    | IMPORT STRUPPER SEMICOLON
+    '''
+    print("BAD IMPORT OP")
+    handleError.upper_case_import += 1
+    handleError.upper_case_import_message += f"Error in line {p.lineno}. Library imports should be declared in lowercase."
+
+
+def p_error_badRenameImportDart(p):
+    '''error_badRenameImportDart : IMPORT STR ID SEMICOLON'''
+    print("FALL RENAME IMP")
+    handleError.bad_rename_import += 1
+    handleError.bad_rename_import_message += f"Error in line {p.lineno}. Missing keyword |as| for rename imports."
+
+
+def p_error_badNotOperator(p):
+    '''error_badNotOperator : VARTYPE ID EQUAL BADNOTOPERATOR BOOLEAN SEMICOLON
+    | VARTYPE ID EQUAL BADNOTOPERATOR ID SEMICOLON
+    | BADNOTOPERATOR ID SEMICOLON
+    '''
+    handleError.bad_not_operator += 1
+    handleError.bad_not_operator_message += f"Error in line {p.lineno}. Missing NOT OPERATOR |!|. Please checks documentation."
+
+# Fin Reglas Semanticas
+
 
 # Testear Codigo
 data = '''int x = 2;
@@ -437,7 +492,10 @@ static int twoSum(double x, double y) { var suma = x + y; return suma; }'''
 def runParserAnalyzer(data):
     runLexerAnalyzer(data)
     parser = yacc.yacc()
+    parser.lineno = 1
     result = parser.parse(data)
+    print(handleError.arithmetic_operations_with_strings, handleError.upper_case_import,
+          handleError.bad_not_operator, handleError.bad_rename_import)
     return result
 # Correr
 

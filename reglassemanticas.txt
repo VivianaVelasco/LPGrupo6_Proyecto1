@@ -1,0 +1,8 @@
+import "DART:MATH";
+import "dart:math" as math;
+final bool2 = ~x;
+final bool3 = not x;
+final res = "2" + 3;
+final res4 = "2" - 3;
+final res5 = "2" / 3;
+final res6 = "2" % 3;
